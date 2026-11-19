@@ -1,43 +1,566 @@
+
 <!doctype html>
 <html lang="vi">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="theme-color" content="#101217">
-  <title>Good Docs</title>
-  <link rel="stylesheet" href="style.css?v=5.0">
-  <script src="config.js" defer></script>
-  <script src="sheets.js?v=5.0" defer></script>
-  <script src="app.js?v=5.0" defer></script>
+    <meta charset="utf-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <meta name="referrer"
+          content="strict-origin-when-cross-origin">
+
+    <meta name="theme-color" content="#101217">
+
+    <title>Good Docs v5.1</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css?v=5.1">
+
+    <!-- Configuration -->
+    <script src="config.js" defer></script>
+
+    <!-- Google Sheets API -->
+    <script src="sheets.js?v=5.1" defer></script>
+
+    <!-- Main Application -->
+    <script src="app.js?v=5.1" defer></script>
 </head>
+
 <body>
+
 <div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><span class="brand-icon">G</span><div><strong>Good Docs</strong><small>Personal workspace</small></div><button class="mobile-only icon-btn" id="closeSidebar" aria-label="Đóng danh sách">✕</button></div>
-    <button id="dictionaryNav" class="nav-entry fixed"><span>📖</span><span>Dictionary</span></button>
-    <div class="library-heading"><span>THƯ VIỆN CỦA BẠN</span><button class="icon-btn" id="newNote" title="Tạo ghi chú">＋</button></div>
-    <div id="noteList" class="note-list"></div>
-    <div class="side-bottom"><div id="syncLabel" class="sync-label">Đang tải dữ liệu</div><button id="exportBtn" class="side-btn">↓ Xuất JSON</button><label for="importFile" class="side-btn">↑ Nhập JSON</label><input id="importFile" type="file" accept=".json,application/json" hidden><button id="connectBtn" class="primary wide">↻ Đồng bộ dữ liệu</button></div>
-  </aside>
-  <main class="main">
-    <header class="topbar"><button class="icon-btn mobile-only" id="openSidebar" aria-label="Mở danh sách">☰</button><span id="pageTitle">Good Docs</span><span class="spacer"></span><span id="saveState" class="muted small">Đang tải</span><button id="reloadBtn" title="Tải dữ liệu mới từ Google Sheets" class="secondary">↻ Tải lại</button></header>
-    <section id="emptyView" class="empty"><div class="empty-icon">✦</div><h1>Chào mừng đến Good Docs</h1><p>Dữ liệu sẽ được tải tự động từ Google Sheets, không cần đăng nhập.</p></section>
-    <section id="noteView" class="view hidden">
-      <div class="doc-header"><input id="noteTitle" aria-label="Tiêu đề" placeholder="Tiêu đề ghi chú" maxlength="160"><button id="deleteNote" class="danger-outline" title="Xóa ghi chú">Xóa tab</button></div>
-      <div class="toolbar"><button id="noteBold" title="In đậm (Ctrl+B)"><b>B</b></button><button id="noteDecrease" title="Giảm cỡ chữ">A−</button><span id="noteFontSize" class="font-value">16px</span><button id="noteIncrease" title="Tăng cỡ chữ">A+</button><span class="toolbar-hint">Bôi đen từ rồi nhấn chuột phải để thêm vào Dictionary</span></div>
-      <article id="noteEditor" class="editor" contenteditable="true" spellcheck="false" aria-label="Nội dung ghi chú"></article>
-    </section>
-    <section id="dictView" class="view hidden">
-      <div class="doc-header"><div><h1>Dictionary</h1><p class="muted small">Từ vựng Anh – Việt</p></div></div>
-      <div class="toolbar"><button id="dictBold" title="In đậm ô đang chọn"><b>B</b></button><button id="dictDecrease" title="Giảm cỡ chữ">A−</button><span id="dictFontSize" class="font-value">16px</span><button id="dictIncrease" title="Tăng cỡ chữ">A+</button><span class="spacer"></span><button id="editToggle" class="secondary">Edit OFF</button><button id="dictSave" class="primary" disabled>Save</button></div>
-      <div class="dict-actions"><input id="searchWord" placeholder="Tìm từ..." aria-label="Tìm từ"><button id="addRow" class="secondary" disabled>＋ Thêm hàng</button><span id="dictCount" class="muted small"></span></div>
-      <div class="table-wrap"><table class="dictionary-table"><thead><tr><th>English</th><th>Tiếng Việt</th><th class="action-col"></th></tr></thead><tbody id="dictBody"></tbody></table></div>
-    </section>
-  </main>
+
+    <!-- =====================================
+         SIDEBAR
+         ===================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <!-- Application Branding -->
+
+        <div class="brand">
+
+            <span class="brand-icon">G</span>
+
+            <div>
+                <strong>Good Docs</strong>
+                <small>Personal workspace</small>
+            </div>
+
+            <button
+                class="mobile-only icon-btn"
+                id="closeSidebar"
+                aria-label="Đóng danh sách">
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- =====================================
+             DICTIONARY NAVIGATION
+             ===================================== -->
+
+        <button
+            id="dictionaryNav"
+            class="nav-entry fixed">
+
+            <span>📖</span>
+            <span>Dictionary</span>
+
+        </button>
+
+
+        <!-- =====================================
+             LIBRARY HEADER
+             ===================================== -->
+
+        <div class="library-heading">
+
+            <span>THƯ VIỆN CỦA BẠN</span>
+
+            <div class="library-tools">
+
+                <!-- Create Folder -->
+
+                <button
+                    class="icon-btn"
+                    id="newFolder"
+                    title="Tạo folder"
+                    aria-label="Tạo folder mới">
+                    📁＋
+                </button>
+
+                <!-- Create Note Outside Folder -->
+
+                <button
+                    class="icon-btn"
+                    id="newNote"
+                    title="Tạo tab ngoài folder"
+                    aria-label="Tạo tab mới">
+                    ＋
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             FOLDERS AND NOTES
+             ===================================== -->
+
+        <!--
+            app.js sẽ tự động hiển thị:
+
+            Folder English
+                + Vocabulary
+                + Grammar
+
+            Folder Programming
+                + C++
+                + TCP/IP
+
+            Các tab ngoài folder
+
+            Folder và tab mới nằm ở đầu danh sách.
+        -->
+
+        <div
+            id="noteList"
+            class="note-list">
+        </div>
+
+
+        <!-- =====================================
+             GOOGLE SHEETS SYNC STATUS
+             ===================================== -->
+
+        <div class="side-bottom">
+
+            <!--
+                Chỉ hiển thị trạng thái đồng bộ.
+
+                Không còn:
+                - Export JSON
+                - Import JSON
+                - Connect Google
+                - Manual Sync
+            -->
+
+            <div
+                id="syncLabel"
+                class="sync-label"
+                role="status"
+                aria-live="polite">
+
+                Đang tải dữ liệu...
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================
+         MAIN CONTENT
+         ===================================== -->
+
+    <main class="main">
+
+        <!-- =====================================
+             TOP BAR
+             ===================================== -->
+
+        <header class="topbar">
+
+            <!-- Mobile Sidebar Button -->
+
+            <button
+                class="icon-btn mobile-only"
+                id="openSidebar"
+                aria-label="Mở danh sách">
+                ☰
+            </button>
+
+            <!-- Current Page Title -->
+
+            <span id="pageTitle">
+                Good Docs
+            </span>
+
+            <span class="spacer"></span>
+
+            <!-- Automatic Save Status -->
+
+            <span
+                id="saveState"
+                class="muted small"
+                role="status"
+                aria-live="polite">
+
+                Đang tải...
+
+            </span>
+
+        </header>
+
+
+        <!-- =====================================
+             EMPTY VIEW
+             ===================================== -->
+
+        <section
+            id="emptyView"
+            class="empty">
+
+            <div class="empty-icon">✦</div>
+
+            <h1>Chào mừng đến Good Docs</h1>
+
+            <p>
+                Dữ liệu được tự động tải và lưu
+                trên Google Sheets.
+            </p>
+
+            <p class="muted small">
+                Tạo một folder hoặc tab để bắt đầu.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================
+             NOTES EDITOR
+             ===================================== -->
+
+        <section
+            id="noteView"
+            class="view hidden">
+
+            <!-- Note Header -->
+
+            <div class="doc-header">
+
+                <input
+                    id="noteTitle"
+                    aria-label="Tiêu đề"
+                    placeholder="Tiêu đề ghi chú"
+                    maxlength="160">
+
+                <button
+                    id="deleteNote"
+                    class="danger-outline"
+                    title="Xóa ghi chú">
+
+                    Xóa tab
+
+                </button>
+
+            </div>
+
+
+            <!-- Notes Toolbar -->
+
+            <div class="toolbar">
+
+                <!-- Bold -->
+
+                <button
+                    id="noteBold"
+                    title="In đậm (Ctrl+B)">
+                    <b>B</b>
+                </button>
+
+                <!-- Decrease Font Size -->
+
+                <button
+                    id="noteDecrease"
+                    title="Giảm cỡ chữ">
+                    A−
+                </button>
+
+                <!-- Current Font Size -->
+
+                <span
+                    id="noteFontSize"
+                    class="font-value">
+                    16px
+                </span>
+
+                <!-- Increase Font Size -->
+
+                <button
+                    id="noteIncrease"
+                    title="Tăng cỡ chữ">
+                    A+
+                </button>
+
+                <!-- Toolbar Hint -->
+
+                <span class="toolbar-hint">
+                    Bôi đen từ rồi nhấn chuột phải
+                    để thêm vào Dictionary
+                </span>
+
+            </div>
+
+
+            <!-- Notes Content -->
+
+            <article
+                id="noteEditor"
+                class="editor"
+                contenteditable="true"
+                spellcheck="false"
+                aria-label="Nội dung ghi chú">
+            </article>
+
+        </section>
+
+
+        <!-- =====================================
+             DICTIONARY VIEW
+             ===================================== -->
+
+        <section
+            id="dictView"
+            class="view hidden">
+
+            <!-- Dictionary Header -->
+
+            <div class="doc-header">
+
+                <div>
+
+                    <h1>Dictionary</h1>
+
+                    <p class="muted small">
+                        Từ vựng Anh – Việt
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Dictionary Toolbar -->
+
+            <div class="toolbar">
+
+                <!-- Bold -->
+
+                <button
+                    id="dictBold"
+                    title="In đậm ô đang chọn">
+                    <b>B</b>
+                </button>
+
+                <!-- Decrease Font Size -->
+
+                <button
+                    id="dictDecrease"
+                    title="Giảm cỡ chữ">
+                    A−
+                </button>
+
+                <!-- Current Font Size -->
+
+                <span
+                    id="dictFontSize"
+                    class="font-value">
+                    16px
+                </span>
+
+                <!-- Increase Font Size -->
+
+                <button
+                    id="dictIncrease"
+                    title="Tăng cỡ chữ">
+                    A+
+                </button>
+
+                <span class="spacer"></span>
+
+                <!-- Edit ON/OFF -->
+
+                <button
+                    id="editToggle"
+                    class="secondary">
+                    Edit OFF
+                </button>
+
+                <!-- Save Dictionary -->
+
+                <button
+                    id="dictSave"
+                    class="primary"
+                    disabled>
+                    Save
+                </button>
+
+            </div>
+
+
+            <!-- =====================================
+                 DICTIONARY ACTIONS
+                 ===================================== -->
+
+            <div class="dict-actions">
+
+                <!-- Search Word -->
+
+                <input
+                    id="searchWord"
+                    placeholder="Tìm từ..."
+                    aria-label="Tìm từ">
+
+                <!-- Add Row -->
+
+                <button
+                    id="addRow"
+                    class="secondary"
+                    disabled>
+
+                    ＋ Thêm hàng
+
+                </button>
+
+                <!-- Dictionary Count -->
+
+                <span
+                    id="dictCount"
+                    class="muted small">
+                </span>
+
+            </div>
+
+
+            <!-- =====================================
+                 DICTIONARY TABLE
+                 ===================================== -->
+
+            <div class="table-wrap">
+
+                <table class="dictionary-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>English</th>
+
+                            <th>Tiếng Việt</th>
+
+                            <th class="action-col"></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <!--
+                        app.js sẽ hiển thị dữ liệu.
+
+                        Từ mới được thêm ở đầu bảng.
+                    -->
+
+                    <tbody id="dictBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
-<div id="contextMenu" class="context-menu hidden"><button id="contextAdd">＋ Thêm vào Dictionary</button></div>
-<div id="wordModal" class="modal-backdrop hidden"><div class="modal"><h2>Thêm vào Dictionary</h2><label>English<input id="modalEnglish" placeholder="English"></label><label>Tiếng Việt<input id="modalVietnamese" placeholder="Nhập nghĩa tiếng Việt"></label><div class="modal-actions"><button id="cancelWord" class="secondary">Hủy</button><button id="confirmWord" class="primary">Add</button></div></div></div>
-<div id="toast" class="toast hidden" role="status"></div>
+
+
+<!-- =====================================
+     CONTEXT MENU
+     ===================================== -->
+
+<div
+    id="contextMenu"
+    class="context-menu hidden">
+
+    <button id="contextAdd">
+        ＋ Thêm vào Dictionary
+    </button>
+
+</div>
+
+
+<!-- =====================================
+     ADD WORD MODAL
+     ===================================== -->
+
+<div
+    id="wordModal"
+    class="modal-backdrop hidden">
+
+    <div class="modal">
+
+        <h2>Thêm vào Dictionary</h2>
+
+        <!-- English Input -->
+
+        <label>
+            English
+
+            <input
+                id="modalEnglish"
+                placeholder="English">
+        </label>
+
+        <!-- Vietnamese Input -->
+
+        <label>
+            Tiếng Việt
+
+            <input
+                id="modalVietnamese"
+                placeholder="Nhập nghĩa tiếng Việt">
+        </label>
+
+
+        <!-- Modal Actions -->
+
+        <div class="modal-actions">
+
+            <button
+                id="cancelWord"
+                class="secondary">
+                Hủy
+            </button>
+
+            <button
+                id="confirmWord"
+                class="primary">
+                Add
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     TOAST NOTIFICATION
+     ===================================== -->
+
+<div
+    id="toast"
+    class="toast hidden"
+    role="status">
+</div>
+
 </body>
 </html>
+
