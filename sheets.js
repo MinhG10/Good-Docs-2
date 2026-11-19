@@ -1,126 +1,624 @@
-/* Good Docs v5: PUBLIC Apps Script bridge. No OAuth.
-   READ: JSONP from doGet (documented Apps Script technique).
-   WRITE: cross-origin hidden FORM POST + JSONP receipt polling, no CORS dependency.
-   NEVER consider a form submit itself proof that a save succeeded.
-*/
+
+/*
+ * =========================================================
+ * GOOD DOCS v5.1 - GOOGLE SHEETS CONNECTION
+ * =========================================================
+ *
+ * Architecture:
+ * GitHub Pages -> Google Apps Script -> Google Sheets
+ *
+ * Authentication:
+ * Public Apps Script Web App, no Google OAuth.
+ *
+ * READ:
+ * JSONP requests through Apps Script doGet().
+ *
+ * WRITE:
+ * Hidden HTML form POST to Apps Script doPost().
+ * Poll request receipt via JSONP to confirm save result.
+ *
+ * IMPORTANT:
+ * Public API means anyone with endpoint access may be
+ * able to read, modify or delete the stored data.
+ * Do not store sensitive information in Good Docs.
+ */
+
 'use strict';
+
 window.GoodDocsCloud = (() => {
+
   const CFG = window.GOODDOCS_CONFIG || {};
+
   const CALLBACKS = window.GoodDocsCallbacks = {};
+
   let counter = 0;
+
   const TIMEOUT = 25000;
 
+  const MAX_PAYLOAD_LENGTH = 1200000;
+
+
+  /* =====================================================
+     1. VALIDATE CONFIGURATION
+     ===================================================== */
+
   function validate() {
-    const url = String(CFG.webAppUrl || '').trim();
-    if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/?#]+\/exec$/.test(url)) {
-      throw new Error('Hãy điền URL Google Apps Script Web App /exec vào config.js.');
+    const url = String(
+      CFG.webAppUrl || ''
+    ).trim();
+
+    const pattern =
+      /^https:\/\/script\.google\.com\/macros\/s\/[^/?#]+\/exec$/;
+
+    if (!pattern.test(url)) {
+      throw new Error(
+        'Hãy điền URL Google Apps Script Web App /exec trong config.js.'
+      );
     }
+
     return url;
   }
-  function jsonp(params, timeout=TIMEOUT) {
+
+
+  /* =====================================================
+     2. JSONP REQUEST
+     ===================================================== */
+
+  function jsonp(params, timeout = TIMEOUT) {
+
     const base = validate();
+
     const key = 'cb_' + (++counter);
-    return new Promise((resolve,reject) => {
+
+    return new Promise((resolve, reject) => {
+
       const script = document.createElement('script');
+
       let settled = false;
-      const finish=(err,value)=>{
-        if(settled)return;settled=true;
-        clearTimeout(timer);delete CALLBACKS[key];script.remove();
-        if(err)reject(err);else resolve(value);
+      let timer;
+
+      function finish(error, value) {
+
+        if (settled) return;
+
+        settled = true;
+
+        clearTimeout(timer);
+
+        delete CALLBACKS[key];
+
+        script.remove();
+
+        if (error) {
+          reject(error);
+        } else {
+          resolve(value);
+        }
+      }
+
+      CALLBACKS[key] = payload => {
+        finish(null, payload);
       };
-      CALLBACKS[key] = payload => finish(null,payload);
-      const query = new URLSearchParams({...params,callback:'GoodDocsCallbacks.'+key,_:String(Date.now())});
-      const timer = setTimeout(()=>finish(new Error('API không phản hồi. Kiểm tra URL /exec, quyền Anyone và mạng.')),timeout);
-      script.onerror = () => finish(new Error('Không tải được API Apps Script. Hãy kiểm tra quyền truy cập Anyone.'));
-      script.src = base + '?' + query;
+
+      const query = new URLSearchParams({
+        ...params,
+        callback: 'GoodDocsCallbacks.' + key,
+        _: String(Date.now())
+      });
+
+      timer = setTimeout(() => {
+        finish(
+          new Error(
+            'API không phản hồi. Kiểm tra URL /exec, quyền Anyone và kết nối mạng.'
+          )
+        );
+      }, timeout);
+
+      script.onerror = () => {
+        finish(
+          new Error(
+            'Không tải được Google Apps Script API. Kiểm tra quyền Anyone.'
+          )
+        );
+      };
+
+      script.src = base + '?' + query.toString();
+
       document.head.appendChild(script);
     });
   }
+
+
+  /* =====================================================
+     3. CHECK API RESPONSE
+     ===================================================== */
+
   function check(result) {
-    if(!result?.ok) {
-      const err = new Error(result?.error || 'Apps Script trả về lỗi không xác định.');
-      err.conflict = !!result?.conflict || String(result?.error||'').startsWith('CONFLICT:');
-      throw err;
+
+    if (!result?.ok) {
+
+      const message =
+        result?.error ||
+        'Google Apps Script trả về lỗi không xác định.';
+
+      const error = new Error(message);
+
+      error.conflict =
+        !!result?.conflict ||
+        String(message).startsWith('CONFLICT:');
+
+      throw error;
     }
+
     return result;
   }
-  async function connect() { validate(); return true; }
-  async function meta() {return check(await jsonp({action:'meta'})).meta;}
+
+
+  /* =====================================================
+     4. CONNECTION
+     ===================================================== */
+
+  async function connect() {
+
+    validate();
+
+    return true;
+  }
+
+  async function meta() {
+
+    const response = await jsonp({
+      action: 'meta'
+    });
+
+    return check(response).meta;
+  }
+
+
+  /* =====================================================
+     5. UTF-8 / BASE64 ENCODING
+     ===================================================== */
+
   function utf8ToBase64(text) {
-    const bytes=new TextEncoder().encode(text);
-    const parts=[];
-    for(let i=0;i<bytes.length;i+=8192)parts.push(String.fromCharCode(...bytes.subarray(i,i+8192)));
+
+    const bytes = new TextEncoder().encode(
+      String(text)
+    );
+
+    const parts = [];
+
+    const blockSize = 8192;
+
+    for (
+      let i = 0;
+      i < bytes.length;
+      i += blockSize
+    ) {
+
+      const block = bytes.subarray(
+        i,
+        i + blockSize
+      );
+
+      parts.push(
+        String.fromCharCode(...block)
+      );
+    }
+
     return btoa(parts.join(''));
   }
+
   function base64ToUtf8(base64) {
-    const binary=atob(base64),bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-    return new TextDecoder('utf-8',{fatal:true}).decode(bytes);
+
+    const binary = atob(base64);
+
+    const bytes = new Uint8Array(
+      binary.length
+    );
+
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new TextDecoder(
+      'utf-8',
+      { fatal: true }
+    ).decode(bytes);
   }
+
+
+  /* =====================================================
+     6. NORMALIZE DATA
+     ===================================================== */
+
+  function normalizeState(state) {
+
+    if (
+      !state ||
+      !Array.isArray(state.notes) ||
+      !Array.isArray(state.dictionary)
+    ) {
+      throw new Error(
+        'Dữ liệu Google Sheets không hợp lệ.'
+      );
+    }
+
+    return {
+
+      notes: state.notes,
+
+      // Compatibility with Good Docs v5.0.
+      folders: Array.isArray(state.folders)
+        ? state.folders
+        : [],
+
+      dictionary: state.dictionary
+    };
+  }
+
+
+  /* =====================================================
+     7. LOAD DATA FROM GOOGLE SHEETS
+     ===================================================== */
+
   async function load() {
-    for(let attempt=0;attempt<2;attempt++) {
+
+    // Retry once when data changes during loading.
+    for (
+      let attempt = 0;
+      attempt < 2;
+      attempt++
+    ) {
+
       const head = await meta();
-      if(!head.chunks)return {notes:[],dictionary:[],revision:head.revision};
-      const parts=new Array(head.chunks);
-      // Limit concurrency to avoid throttling Apps Script quotas.
-      let next=0;
-      async function worker(){
-        while(next<head.chunks) {
-          const i=next++;
-          const r=check(await jsonp({action:'chunk',slot:head.slot,revision:String(head.revision),index:String(i)}));
-          if(r.index!==i || r.revision!==head.revision)throw new Error('Snapshot changed; reload.');
-          parts[i]=r.data;
+
+      // Empty database.
+      if (!head.chunks) {
+
+        return {
+
+          notes: [],
+          folders: [],
+          dictionary: [],
+          revision: head.revision
+        };
+      }
+
+      const parts = new Array(
+        head.chunks
+      );
+
+      // Limit simultaneous requests.
+      let next = 0;
+
+      async function worker() {
+
+        while (next < head.chunks) {
+
+          const index = next++;
+
+          const response = check(
+            await jsonp({
+
+              action: 'chunk',
+
+              slot: head.slot,
+
+              revision: String(
+                head.revision
+              ),
+
+              index: String(index)
+            })
+          );
+
+          // Detect snapshot changes.
+          if (
+            response.index !== index ||
+            response.revision !== head.revision
+          ) {
+
+            throw new Error(
+              'Snapshot changed; reload.'
+            );
+          }
+
+          parts[index] = response.data;
         }
       }
+
       try {
-        await Promise.all(Array.from({length:Math.min(4,head.chunks)},worker));
-        const verify=await meta();
-        if(verify.revision!==head.revision||verify.slot!==head.slot)continue;
-        const state=JSON.parse(base64ToUtf8(parts.join('')));
-        if(!Array.isArray(state.notes)||!Array.isArray(state.dictionary))throw new Error('Snapshot không hợp lệ.');
-        return {notes:state.notes,dictionary:state.dictionary,revision:head.revision};
-      }catch(error) {
-        if(String(error.message).includes('Snapshot changed')&&attempt===0)continue;
+
+        const workers = Math.min(
+          4,
+          head.chunks
+        );
+
+        await Promise.all(
+          Array.from(
+            { length: workers },
+            () => worker()
+          )
+        );
+
+        // Verify revision after reading.
+        const verify = await meta();
+
+        if (
+          verify.revision !== head.revision ||
+          verify.slot !== head.slot
+        ) {
+          continue;
+        }
+
+        const encoded = parts.join('');
+
+        const decoded = base64ToUtf8(
+          encoded
+        );
+
+        const parsed = JSON.parse(
+          decoded
+        );
+
+        const state = normalizeState(
+          parsed
+        );
+
+        return {
+
+          notes: state.notes,
+
+          folders: state.folders,
+
+          dictionary: state.dictionary,
+
+          revision: head.revision
+        };
+
+      } catch (error) {
+
+        const changed =
+          String(error.message)
+            .includes('Snapshot changed');
+
+        if (changed && attempt === 0) {
+          continue;
+        }
+
         throw error;
       }
     }
-    throw new Error('Dữ liệu thay đổi trong lúc tải. Hãy thử lại.');
+
+    throw new Error(
+      'Dữ liệu thay đổi trong lúc tải. Hãy thử lại.'
+    );
   }
+
+
+  /* =====================================================
+     8. POST DATA USING HIDDEN FORM
+     ===================================================== */
+
   function postForm(fields) {
-    const id='gooddocs_post_'+Math.random().toString(36).slice(2);
-    const iframe=document.createElement('iframe');
-    iframe.name=id;iframe.title='Good Docs save';iframe.style.display='none';
-    const form=document.createElement('form');
-    form.action=validate();form.method='POST';form.target=id;form.style.display='none';
-    for(const [name,value] of Object.entries(fields)) {
-      const input=document.createElement('input');input.type='hidden';input.name=name;input.value=String(value);form.appendChild(input);
+
+    const id =
+      'gooddocs_post_' +
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+    const iframe = document.createElement(
+      'iframe'
+    );
+
+    iframe.name = id;
+
+    iframe.title = 'Good Docs Save';
+
+    iframe.style.display = 'none';
+
+    const form = document.createElement(
+      'form'
+    );
+
+    form.action = validate();
+
+    form.method = 'POST';
+
+    form.target = id;
+
+    form.style.display = 'none';
+
+    for (
+      const [name, value] of Object.entries(fields)
+    ) {
+
+      const input = document.createElement(
+        'input'
+      );
+
+      input.type = 'hidden';
+
+      input.name = name;
+
+      input.value = String(value);
+
+      form.appendChild(input);
     }
-    document.body.append(iframe,form);
-    try{form.submit();}catch(err){form.remove();iframe.remove();throw err;}
-    // The iframe is cross-origin: its response is NOT readable. Poll receipt instead.
-    return ()=>{form.remove();iframe.remove();};
-  }
-  async function save(state,expectedRevision) {
-    if(!Array.isArray(state.notes)||!Array.isArray(state.dictionary))throw new Error('Dữ liệu không hợp lệ.');
-    const payload=utf8ToBase64(JSON.stringify(state));
-    if(payload.length>1200000)throw new Error('Vượt giới hạn 1,2 triệu ký tự Base64 của phiên bản này. Hãy xuất JSON để sao lưu và chia nhỏ thư viện.');
-    const requestId='req_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    const cleanup=postForm({action:'save',requestId,expectedRevision,payload});
-    const start=Date.now();
+
+    document.body.append(
+      iframe,
+      form
+    );
+
     try {
-      while(Date.now()-start<95000) {
-        await new Promise(r=>setTimeout(r,1400));
+
+      form.submit();
+
+    } catch (error) {
+
+      form.remove();
+      iframe.remove();
+
+      throw error;
+    }
+
+    // The cross-origin iframe response cannot be read.
+    // Receipt polling is required for confirmation.
+
+    return () => {
+
+      form.remove();
+
+      iframe.remove();
+    };
+  }
+
+
+  /* =====================================================
+     9. SAVE DATA TO GOOGLE SHEETS
+     ===================================================== */
+
+  async function save(
+    state,
+    expectedRevision
+  ) {
+
+    // Validate data.
+    if (
+      !state ||
+      !Array.isArray(state.notes) ||
+      !Array.isArray(state.folders) ||
+      !Array.isArray(state.dictionary)
+    ) {
+
+      throw new Error(
+        'Dữ liệu không hợp lệ: thiếu notes, folders hoặc dictionary.'
+      );
+    }
+
+    // Serialize all application data.
+    const snapshot = {
+
+      notes: state.notes,
+
+      folders: state.folders,
+
+      dictionary: state.dictionary
+    };
+
+    const json = JSON.stringify(
+      snapshot
+    );
+
+    const payload = utf8ToBase64(
+      json
+    );
+
+    if (
+      payload.length > MAX_PAYLOAD_LENGTH
+    ) {
+
+      throw new Error(
+        'Dữ liệu vượt giới hạn lưu trữ của Good Docs v5.1 (1,2 triệu ký tự Base64).'
+      );
+    }
+
+    const requestId =
+      'req_' +
+      Date.now() +
+      '_' +
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+    const cleanup = postForm({
+
+      action: 'save',
+
+      requestId,
+
+      expectedRevision,
+
+      payload
+    });
+
+    const start = Date.now();
+
+    try {
+
+      // Wait for backend receipt.
+      while (
+        Date.now() - start < 95000
+      ) {
+
+        await new Promise(resolve => {
+          setTimeout(resolve, 1400);
+        });
+
         let result;
-        try{result=await jsonp({action:'receipt',id:requestId});}
-        catch(err){continue;} // Might be a temporary network/CORS-independent script failure.
-        if(result?.pending)continue;
+
+        try {
+
+          result = await jsonp({
+
+            action: 'receipt',
+
+            id: requestId
+          });
+
+        } catch (error) {
+
+          // Temporary network failure.
+          // Continue polling instead of claiming failure.
+          continue;
+        }
+
+        if (result?.pending) {
+          continue;
+        }
+
         return check(result).revision;
       }
-      // Request may have succeeded despite a lost receipt; inspect head before reporting uncertainty.
-      const head=await meta();
-      if(head.lastRequestId===requestId)return head.revision;
-      throw new Error('Không xác nhận được kết quả lưu. Không chỉnh sửa trên thiết bị khác; tải lại và kiểm tra trước khi thử tiếp.');
-    }finally{cleanup();}
+
+      // Receipt might be lost even after successful save.
+      // Check backend metadata before reporting failure.
+
+      const head = await meta();
+
+      if (
+        head.lastRequestId === requestId
+      ) {
+
+        return head.revision;
+      }
+
+      throw new Error(
+        'Không xác nhận được kết quả lưu. Hãy kiểm tra dữ liệu Google Sheets trước khi tiếp tục chỉnh sửa.'
+      );
+
+    } finally {
+
+      cleanup();
+    }
   }
-  return {connect,load,save,hasToken:()=>true};
+
+
+  /* =====================================================
+     10. PUBLIC API
+     ===================================================== */
+
+  return {
+
+    connect,
+
+    load,
+
+    save,
+
+    // Compatibility with older app.js versions.
+    hasToken: () => true
+  };
+
 })();
