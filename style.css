@@ -1,35 +1,1574 @@
-:root{color-scheme:dark;--bg:#0e1015;--panel:#171a21;--panel2:#20242d;--line:#303641;--text:#ecedf2;--muted:#9da4b2;--accent:#8297ff;--accent2:#667deb;--danger:#ef8e90;--radius:11px}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}button,input{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:not-allowed;opacity:.38}button:focus-visible,input:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.layout{display:flex;min-height:100dvh}.sidebar{width:275px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100dvh}.brand{padding:23px 18px 18px;display:flex;gap:12px;align-items:center}.brand strong{display:block;font-size:19px;letter-spacing:-.4px}.brand small{display:block;color:var(--muted);font-size:11px}.brand-icon{background:linear-gradient(145deg,#7f91f7,#566be1);border-radius:11px;width:38px;height:38px;text-align:center;line-height:38px;font-weight:800;font-size:24px}.nav-entry{border:0;background:transparent;text-align:left;padding:12px 17px;display:flex;align-items:center;gap:12px;margin:2px 11px;border-radius:9px;color:var(--text)}.nav-entry:hover,.nav-entry.active,.note-row.active{background:#2b3248}.fixed{font-weight:650}.library-heading{display:flex;justify-content:space-between;align-items:center;margin:29px 17px 8px;color:var(--muted);font-size:11px;font-weight:750;letter-spacing:1px}.icon-btn{border:0;background:transparent;border-radius:7px;padding:5px 9px;font-size:20px}.icon-btn:hover{background:#313848}.note-list{overflow-y:auto;flex:1;padding:0 10px}.note-row{width:100%;border:0;text-align:left;background:none;border-radius:8px;padding:9px 13px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}.note-row:hover{background:#272d38}.side-bottom{border-top:1px solid var(--line);padding:12px 15px 20px;display:grid;gap:8px}.sync-label{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.side-btn{border:0;background:transparent;padding:5px 4px;text-align:left;color:var(--muted);cursor:pointer}.side-btn:hover{color:var(--text)}.main{min-width:0;flex:1;display:flex;flex-direction:column}.topbar{height:65px;border-bottom:1px solid var(--line);padding:0 28px;display:flex;align-items:center;gap:13px;position:sticky;top:0;background:var(--bg);z-index:3}.topbar #pageTitle{font-weight:650}.spacer{flex:1}.muted{color:var(--muted)}.small{font-size:12px}.primary,.secondary,.danger-outline{padding:8px 13px;border-radius:8px;font-size:13px;font-weight:650}.primary{background:var(--accent2);border:1px solid var(--accent2);color:white}.primary:hover:not(:disabled){background:#7588f8}.secondary{background:var(--panel2);border:1px solid var(--line)}.secondary:hover:not(:disabled){border-color:var(--accent)}.danger-outline{background:transparent;color:var(--danger);border:1px solid #814b52}.wide{width:100%}.view{width:min(100%,1120px);margin:0 auto;padding:34px 42px 60px;flex:1}.hidden{display:none!important}.doc-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}.doc-header h1{margin:0;font-size:29px}.doc-header p{margin:3px 0}.doc-header input{flex:1;background:transparent;border:0;color:var(--text);font-size:28px;font-weight:750;min-width:0}.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:7px;padding:10px 0 15px;border-bottom:1px solid var(--line);margin-bottom:17px}.toolbar>button{border-radius:7px;background:var(--panel2);border:1px solid var(--line);min-width:36px;height:36px;padding:0 9px}.toolbar>.primary{background:var(--accent2)}.toolbar button:hover:not(:disabled){border-color:var(--accent)}.toolbar-hint{font-size:12px;color:var(--muted);margin-left:15px}.font-value{font-size:12px;color:var(--muted);min-width:34px;text-align:center}.editor{padding:26px 28px;min-height:60vh;background:#171a20;border:1px solid var(--line);border-radius:10px;overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.8;outline:none}.editor:empty:before{content:"Bắt đầu viết nội dung...";color:#737c8b}.editor p{margin:.5em 0}.editor img{max-width:100%}.empty{text-align:center;margin:auto;padding:80px 20px;color:var(--muted)}.empty h1{color:var(--text)}.empty-icon{font-size:50px;color:var(--accent)}.dict-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.dict-actions input,.modal input{background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:9px 12px}.dict-actions input{min-width:150px;flex:1;max-width:350px}.table-wrap{border:1px solid var(--line);border-radius:10px;overflow:auto}.dictionary-table{width:100%;border-collapse:collapse;table-layout:fixed}.dictionary-table th{background:#242a34;text-align:left;padding:13px 17px;color:#cdd2e3}.dictionary-table td{padding:9px 13px;border-top:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}.dictionary-table th:nth-child(1),.dictionary-table th:nth-child(2){width:46%}.dictionary-table .action-col{width:8%}.dictionary-table [contenteditable]{min-height:27px;padding:5px;border-radius:5px;white-space:pre-wrap;overflow-wrap:anywhere}.dictionary-table [contenteditable="true"]{background:#272d38;outline:1px solid #3b4658}.dictionary-table .remove-word{color:var(--danger);border:0;background:transparent}.context-menu{position:fixed;z-index:25;border:1px solid var(--line);background:#2b3040;border-radius:8px;box-shadow:0 14px 40px #0009;padding:5px}.context-menu button{padding:9px 12px;border:0;background:none}.context-menu button:hover{background:#404b63}.modal-backdrop{position:fixed;inset:0;background:#000a;z-index:30;display:grid;place-items:center;padding:15px}.modal{width:min(100%,440px);background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:24px;box-shadow:0 20px 60px #0009}.modal h2{margin:0 0 18px}.modal label{display:block;font-size:13px;color:var(--muted);margin:12px 0}.modal label input{width:100%;display:block;margin-top:6px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}.toast{position:fixed;bottom:24px;right:23px;z-index:40;background:#2b3449;padding:12px 18px;border:1px solid #6976a1;border-radius:10px;box-shadow:0 9px 25px #0007;max-width:min(90vw,450px)}.mobile-only{display:none}@media(max-width:740px){.mobile-only{display:inline-block}.sidebar{position:fixed;z-index:15;transform:translateX(-101%);transition:transform .2s;width:min(86vw,310px);box-shadow:16px 0 35px #0009}.sidebar.open{transform:translateX(0)}.brand #closeSidebar{margin-left:auto}.topbar{padding:0 12px;height:58px;gap:7px}.topbar .secondary{font-size:11px;padding:6px}.view{padding:19px 12px 48px}.doc-header input{font-size:22px}.toolbar-hint{margin:4px 0}.editor{padding:17px 14px;min-height:65dvh}.dictionary-table th,.dictionary-table td{padding:8px 6px}.dictionary-table .action-col{width:35px}.dictionary-table th:nth-child(1),.dictionary-table th:nth-child(2){width:calc((100% - 35px)/2)}}
 
-/* v4.1: Normalize pasted document appearance for dark-mode and responsive editor. */
+/* =========================================================
+   GOOD DOCS v5.1
+   DARK MODE - FOLDERS - NOTES - DICTIONARY - MOBILE
+   ========================================================= */
+
+
+/* =========================================================
+   1. THEME VARIABLES
+   ========================================================= */
+
+:root {
+    color-scheme: dark;
+
+    --bg: #101217;
+    --sidebar: #171a22;
+    --surface: #1c2029;
+    --surface-hover: #252b37;
+    --surface-active: #303b58;
+
+    --editor-bg: #181b22;
+    --input-bg: #20242e;
+
+    --text: #f4f5f9;
+    --muted: #a1a8b8;
+    --border: #303644;
+
+    --primary: #6478ed;
+    --primary-hover: #7a8bf5;
+    --primary-text: #ffffff;
+
+    --danger: #f47b83;
+    --success: #4adea0;
+
+    --radius: 9px;
+    --sidebar-width: 272px;
+
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+
+/* =========================================================
+   2. GLOBAL RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    color: var(--text);
+}
+
+button:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+}
+
+input,
+textarea {
+    color: var(--text);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #818999;
+}
+
+button:focus-visible,
+input:focus-visible,
+[contenteditable="true"]:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+::selection {
+    background: #596ee3;
+    color: #ffffff;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mobile-only {
+    display: none !important;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 12px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+
+/* =========================================================
+   3. MAIN APPLICATION LAYOUT
+   ========================================================= */
+
+.layout {
+    display: flex;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    background: var(--bg);
+}
+
+
+/* =========================================================
+   4. SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    position: sticky;
+    top: 0;
+
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    height: 100vh;
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+
+    overflow: hidden;
+    z-index: 100;
+}
+
+
+/* =========================================================
+   5. BRAND
+   ========================================================= */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 20px 14px 19px;
+    min-height: 78px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.brand-icon {
+    width: 37px;
+    height: 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--primary);
+    color: white;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-weight: 750;
+
+    flex-shrink: 0;
+}
+
+.brand > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.brand strong {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.brand small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   6. BUTTONS
+   ========================================================= */
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 30px;
+    min-height: 30px;
+
+    padding: 5px 7px;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--muted);
+
+    font-size: 17px;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.icon-btn:hover {
+    background: var(--surface-hover);
+    color: white;
+}
+
+.primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 15px;
+
+    background: var(--primary);
+    color: var(--primary-text);
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    font-weight: 650;
+}
+
+.primary:not(:disabled):hover {
+    background: var(--primary-hover);
+}
+
+.secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 13px;
+
+    background: var(--surface);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.secondary:not(:disabled):hover {
+    background: var(--surface-hover);
+}
+
+.danger-outline {
+    padding: 8px 13px;
+
+    background: transparent;
+    border: 1px solid #81414b;
+
+    color: #ff929b;
+    border-radius: 8px;
+}
+
+.danger-outline:hover {
+    background: rgba(244, 123, 131, 0.1);
+}
+
+.wide {
+    width: 100%;
+}
+
+
+/* =========================================================
+   7. FIXED DICTIONARY NAVIGATION
+   ========================================================= */
+
+.nav-entry {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    width: calc(100% - 20px);
+    margin: 14px 10px 9px;
+
+    padding: 11px 12px;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+
+    background: transparent;
+    color: var(--text);
+
+    font-size: 14px;
+    text-align: left;
+}
+
+.nav-entry:hover {
+    background: var(--surface-hover);
+}
+
+.nav-entry.active {
+    background: var(--surface-active);
+    border-color: #5261a0;
+    color: white;
+}
+
+.nav-entry span:first-child {
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   8. LIBRARY HEADER
+   ========================================================= */
+
+.library-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 6px;
+
+    padding: 14px 12px 9px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.65px;
+}
+
+.library-heading > span {
+    white-space: nowrap;
+}
+
+.library-tools {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.library-tools .icon-btn {
+    font-size: 15px;
+    padding: 4px 5px;
+}
+
+
+/* =========================================================
+   9. NOTES LIST
+   ========================================================= */
+
+.note-list {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 4px 9px 16px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #41495c transparent;
+}
+
+.note-row {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 2px 0;
+    padding: 10px 11px;
+
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    color: #d7dce8;
+
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    transition: background 0.15s ease;
+}
+
+.note-row:hover {
+    background: var(--surface-hover);
+    color: #ffffff;
+}
+
+.note-row.active {
+    background: var(--surface-active);
+    border-color: #485983;
+    color: #ffffff;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   10. FOLDER NAVIGATION - v5.1
+   ========================================================= */
+
+.folder-section {
+    margin: 3px 0 7px;
+}
+
+.folder-heading {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    gap: 2px;
+
+    padding: 3px 2px;
+
+    border-radius: 8px;
+}
+
+.folder-heading:hover {
+    background: var(--surface-hover);
+}
+
+.folder-toggle {
+    display: flex;
+    align-items: center;
+
+    flex: 1;
+    min-width: 0;
+
+    padding: 7px 5px;
+
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+
+    color: #eef0f8;
+
+    font-size: 13px;
+    font-weight: 650;
+    text-align: left;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.folder-toggle:hover {
+    color: #ffffff;
+}
+
+.folder-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-width: 23px;
+    height: 27px;
+
+    padding: 3px;
+
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+
+    color: var(--muted);
+
+    font-size: 16px;
+    line-height: 1;
+}
+
+.folder-action:hover {
+    background: #343d50;
+    color: #ffffff;
+}
+
+.folder-children {
+    margin-left: 16px;
+    padding-left: 10px;
+
+    border-left: 1px solid #3a4251;
+}
+
+.folder-children .note-row {
+    padding: 8px 9px;
+    font-size: 12.5px;
+}
+
+.root-notes {
+    margin-top: 7px;
+}
+
+
+/* =========================================================
+   11. SIDEBAR FOOTER / GOOGLE SHEETS STATUS
+   ========================================================= */
+
+.side-bottom {
+    flex-shrink: 0;
+
+    padding: 14px 12px;
+
+    background: var(--sidebar);
+    border-top: 1px solid var(--border);
+}
+
+.sync-label {
+    font-size: 11px;
+    line-height: 1.5;
+
+    color: var(--muted);
+
+    overflow-wrap: anywhere;
+}
+
+.sync-label.success {
+    color: var(--success);
+}
+
+.sync-label.error {
+    color: var(--danger);
+}
+
+
+/* =========================================================
+   12. MAIN CONTENT
+   ========================================================= */
+
+.main {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    background: var(--bg);
+}
+
+
+/* =========================================================
+   13. TOP BAR
+   ========================================================= */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 61px;
+
+    padding: 12px 28px;
+
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+}
+
+#pageTitle {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 650;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#saveState {
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   14. EMPTY VIEW
+   ========================================================= */
+
+.empty {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 35px 22px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 17px;
+
+    border-radius: 18px;
+
+    background: rgba(100, 120, 237, 0.12);
+    color: var(--primary);
+
+    font-size: 30px;
+}
+
+.empty h1 {
+    margin: 0 0 8px;
+
+    font-size: 25px;
+    color: #ffffff;
+}
+
+.empty p {
+    margin: 4px 0;
+    max-width: 500px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   15. NOTES / DICTIONARY VIEW
+   ========================================================= */
+
+.view {
+    width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
+    padding: 24px 30px 45px;
+
+    min-width: 0;
+}
+
+.doc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    min-height: 49px;
+    margin-bottom: 20px;
+}
+
+.doc-header h1 {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 25px;
+    line-height: 1.35;
+}
+
+.doc-header p {
+    margin: 4px 0 0;
+}
+
+#noteTitle {
+    flex: 1;
+    min-width: 0;
+
+    padding: 4px 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: white;
+
+    font-size: 26px;
+    font-weight: 750;
+}
+
+#noteTitle::placeholder {
+    color: #7e8799;
+}
+
+
+/* =========================================================
+   16. EDITOR TOOLBAR
+   ========================================================= */
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    width: 100%;
+    min-width: 0;
+
+    margin-bottom: 14px;
+    padding: 8px 0 13px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.toolbar button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 35px;
+    padding: 7px 11px;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    background: #212630;
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.toolbar button:not(:disabled):hover {
+    background: #343c4d;
+}
+
+.toolbar .primary {
+    background: var(--primary);
+    border-color: transparent;
+}
+
+.toolbar .primary:not(:disabled):hover {
+    background: var(--primary-hover);
+}
+
+.font-value {
+    min-width: 39px;
+
+    text-align: center;
+
+    color: #ccd6ef;
+    font-size: 12px;
+}
+
+.toolbar-hint {
+    margin-left: 10px;
+
+    color: #9aa6c3;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   17. NOTES EDITOR - DARK MODE FIX
+   ========================================================= */
+
 .editor {
-  color: var(--text);
-  min-width: 0;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-wrap: anywhere;
-  word-break: normal;
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 500px;
+
+    margin: 0;
+    padding: 24px 28px;
+
+    background: var(--editor-bg);
+    color: #ffffff;
+
+    border: 1px solid #3c4352;
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.85;
+    text-align: left;
+
+    outline: none;
+
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+    word-break: normal;
+
+    white-space: pre-wrap;
+    caret-color: #ffffff;
+
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
 }
-.editor, .editor * {
-  color: var(--text) !important;
-  background-color: transparent !important;
-  font-family: inherit !important;
-  max-width: 100% !important;
-  box-sizing: border-box;
+
+.editor:focus {
+    border-color: #7287ff;
+    box-shadow: 0 0 0 2px rgba(114, 135, 255, 0.17);
 }
+
+/* Force readable text, including pasted HTML */
+
+.editor,
+.editor * {
+    color: #ffffff !important;
+
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Remove pasted background colors */
+
+.editor * {
+    background-color: transparent !important;
+    font-family: inherit !important;
+}
+
+/* Prevent pasted content shifting outside editor */
+
 .editor > * {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  text-indent: 0 !important;
-  float: none !important;
-  position: static !important;
-  transform: none !important;
-  width: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    text-indent: 0 !important;
+
+    float: none !important;
+
+    max-width: 100% !important;
 }
-.editor p, .editor div, .editor li, .editor blockquote {
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+
+/* Paragraphs */
+
+.editor p,
+.editor div,
+.editor li,
+.editor blockquote {
+    overflow-wrap: anywhere;
+    word-break: normal;
 }
-.editor pre, .editor code { white-space: pre-wrap; overflow-wrap: anywhere; }
-.editor table { display: block; max-width: 100%; overflow-x: auto; }
-.editor img { height: auto; max-width: 100%; }
+
+.editor p {
+    margin-top: 0;
+    margin-bottom: 13px;
+}
+
+/* Lists */
+
+.editor ul,
+.editor ol {
+    padding-left: 24px;
+}
+
+/* Preserve bold and italic */
+
+.editor strong,
+.editor b {
+    font-weight: 750;
+}
+
+.editor em,
+.editor i {
+    font-style: italic;
+}
+
+/* Links */
+
+.editor a {
+    color: #aebdff !important;
+    text-decoration: underline;
+}
+
+/* Images */
+
+.editor img {
+    display: inline-block;
+
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Code */
+
+.editor pre {
+    overflow-x: auto;
+
+    padding: 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.editor code {
+    font-family: Consolas, "Courier New", monospace !important;
+    overflow-wrap: anywhere;
+}
+
+/* Tables pasted into editor */
+
+.editor table {
+    width: 100%;
+    max-width: 100%;
+
+    border-collapse: collapse;
+}
+
+.editor th,
+.editor td {
+    padding: 8px;
+
+    border: 1px solid var(--border);
+    vertical-align: top;
+
+    overflow-wrap: anywhere;
+}
+
+/* Quote */
+
+.editor blockquote {
+    margin: 12px 0;
+    padding-left: 14px;
+
+    border-left: 3px solid var(--primary);
+
+    color: #d2d9eb !important;
+}
+
+
+/* =========================================================
+   18. DICTIONARY ACTION BAR
+   ========================================================= */
+
+.dict-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+#searchWord {
+    flex: 1;
+    min-width: 150px;
+    max-width: 350px;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--input-bg);
+    color: #ffffff;
+
+    outline: none;
+}
+
+#searchWord:focus {
+    border-color: var(--primary);
+}
+
+#dictCount {
+    margin-left: auto;
+}
+
+
+/* =========================================================
+   19. DICTIONARY TABLE
+   ========================================================= */
+
+.table-wrap {
+    width: 100%;
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--editor-bg);
+}
+
+.dictionary-table {
+    width: 100%;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    color: #ffffff;
+}
+
+.dictionary-table thead {
+    background: #252b36;
+}
+
+.dictionary-table th {
+    padding: 14px 15px;
+
+    color: #e8ebf7;
+
+    font-size: 13px;
+    font-weight: 750;
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.dictionary-table td {
+    padding: 11px 15px;
+
+    color: #ffffff;
+    background: transparent;
+
+    vertical-align: top;
+
+    border-bottom: 1px solid #303540;
+
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.dictionary-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.dictionary-table tbody tr:hover {
+    background: #202631;
+}
+
+/* Force white text for Dictionary content */
+
+.dictionary-table td,
+.dictionary-table td * {
+    color: #ffffff;
+}
+
+/* Editable cells */
+
+.dictionary-table [contenteditable="true"] {
+    min-height: 24px;
+
+    padding: 5px 6px;
+
+    border-radius: 5px;
+    outline: none;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+
+    caret-color: #ffffff;
+}
+
+.dictionary-table [contenteditable="true"]:focus {
+    background: #293346;
+    box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.dictionary-table input,
+.dictionary-table textarea {
+    width: 100%;
+    min-width: 0;
+
+    padding: 7px 8px;
+
+    background: var(--input-bg);
+    color: white;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.dictionary-table input:focus,
+.dictionary-table textarea:focus {
+    outline: 1px solid var(--primary);
+}
+
+.action-col {
+    width: 52px;
+}
+
+.dictionary-table .action-col {
+    text-align: center;
+}
+
+.dictionary-table td button {
+    padding: 5px 8px;
+
+    background: transparent;
+    color: #ff949b;
+
+    border: 0;
+    border-radius: 5px;
+}
+
+.dictionary-table td button:hover {
+    background: rgba(255, 100, 110, 0.14);
+}
+
+#editToggle {
+    white-space: nowrap;
+}
+
+#dictSave:disabled,
+#addRow:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   20. RIGHT CLICK CONTEXT MENU
+   ========================================================= */
+
+.context-menu {
+    position: fixed;
+
+    min-width: 190px;
+    max-width: calc(100vw - 24px);
+
+    padding: 6px;
+
+    background: #252a35;
+
+    border: 1px solid #495164;
+    border-radius: 9px;
+
+    box-shadow: var(--shadow);
+
+    z-index: 3000;
+}
+
+.context-menu button {
+    width: 100%;
+
+    padding: 10px 13px;
+
+    background: transparent;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    text-align: left;
+    font-size: 13px;
+}
+
+.context-menu button:hover {
+    background: #39445c;
+}
+
+
+/* =========================================================
+   21. MODAL
+   ========================================================= */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(0, 0, 0, 0.72);
+
+    z-index: 4000;
+}
+
+.modal {
+    width: 100%;
+    max-width: 460px;
+
+    padding: 24px;
+
+    background: #1d222c;
+
+    border: 1px solid #465063;
+    border-radius: 13px;
+
+    box-shadow: var(--shadow);
+}
+
+.modal h2 {
+    margin: 0 0 20px;
+
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.modal label {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+    margin-bottom: 15px;
+
+    color: #d7dce7;
+    font-size: 13px;
+}
+
+.modal input {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    background: var(--input-bg);
+    color: #ffffff;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    outline: none;
+}
+
+.modal input:focus {
+    border-color: var(--primary);
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+    margin-top: 22px;
+}
+
+
+/* =========================================================
+   22. TOAST NOTIFICATIONS
+   ========================================================= */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+
+    max-width: min(420px, calc(100vw - 32px));
+
+    padding: 12px 18px;
+
+    background: #303a4e;
+    color: #ffffff;
+
+    border: 1px solid #53617a;
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    box-shadow: var(--shadow);
+
+    z-index: 5000;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   23. SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #41495a;
+    border-radius: 9px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #566075;
+}
+
+
+/* =========================================================
+   24. TABLET RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    :root {
+        --sidebar-width: 245px;
+    }
+
+    .view {
+        padding: 22px 23px 35px;
+    }
+
+    .topbar {
+        padding: 12px 23px;
+    }
+
+    .editor {
+        padding: 20px 22px;
+    }
+
+    .toolbar-hint {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+
+/* =========================================================
+   25. MOBILE RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .mobile-only {
+        display: inline-flex !important;
+    }
+
+    .layout {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+
+        top: 0;
+        bottom: 0;
+        left: 0;
+
+        width: min(310px, 88vw);
+        min-width: 0;
+        height: 100dvh;
+
+        transform: translateX(-105%);
+
+        transition: transform 0.22s ease;
+
+        box-shadow: var(--shadow);
+
+        z-index: 2000;
+    }
+
+    .sidebar.open,
+    .sidebar.show,
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .brand {
+        padding: 14px 12px;
+        min-height: 68px;
+    }
+
+    #closeSidebar {
+        margin-left: auto;
+    }
+
+    .main {
+        width: 100%;
+        min-width: 0;
+
+        min-height: 100dvh;
+    }
+
+    .topbar {
+        min-height: 56px;
+        padding: 10px 14px;
+        gap: 9px;
+    }
+
+    #pageTitle {
+        font-size: 14px;
+    }
+
+    #saveState {
+        max-width: 125px;
+        font-size: 10px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .view {
+        width: 100%;
+        padding: 17px 13px 28px;
+    }
+
+    .doc-header {
+        gap: 9px;
+        margin-bottom: 14px;
+    }
+
+    #noteTitle {
+        font-size: 21px;
+    }
+
+    .doc-header h1 {
+        font-size: 22px;
+    }
+
+    .danger-outline {
+        padding: 7px 9px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .toolbar {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+
+    .toolbar button {
+        padding: 7px 9px;
+        min-height: 34px;
+        font-size: 12px;
+    }
+
+    .toolbar-hint {
+        width: 100%;
+        margin-left: 0;
+
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .editor {
+        min-height: 55vh;
+        min-height: 55dvh;
+
+        padding: 16px 15px;
+
+        font-size: 15px;
+        line-height: 1.75;
+
+        border-radius: 9px;
+    }
+
+    .dict-actions {
+        gap: 8px;
+    }
+
+    #searchWord {
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+    }
+
+    #dictCount {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .dictionary-table th,
+    .dictionary-table td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .action-col {
+        width: 40px;
+    }
+
+    .modal {
+        padding: 19px;
+    }
+
+    .toast {
+        right: 12px;
+        bottom: 12px;
+    }
+}
+
+
+/* =========================================================
+   26. SMALL MOBILE SCREENS
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+    .view {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .editor {
+        padding: 13px 11px;
+    }
+
+    .toolbar {
+        gap: 5px;
+    }
+
+    .toolbar button {
+        padding: 6px 8px;
+    }
+
+    .font-value {
+        min-width: 33px;
+    }
+
+    .dictionary-table th,
+    .dictionary-table td {
+        padding: 9px 6px;
+        font-size: 11px;
+    }
+}
+
+
+/* =========================================================
+   27. ACCESSIBILITY / MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
