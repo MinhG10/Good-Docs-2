@@ -90,8 +90,7 @@ input:focus-visible,
 }
 
 ::selection {
-    background: #596ee3;
-    color: #fff;
+    background: rgba(89, 110, 227, .35);
 }
 
 .hidden {
