@@ -815,6 +815,7 @@
     }
 
     $('noteEditor').focus();
+    document.execCommand('styleWithCSS', false, true);
     document.execCommand('foreColor', false, color);
 
     syncEditor();
@@ -832,6 +833,7 @@
     }
 
     $('noteEditor').focus();
+    document.execCommand('styleWithCSS', false, true);
     document.execCommand('foreColor', false, '#f4f5f9');
 
     syncEditor();

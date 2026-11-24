@@ -768,7 +768,6 @@ input:focus-visible,
 .editor * {
     box-sizing: border-box;
     max-width: 100%;
-    color: inherit;
     overflow-wrap: anywhere;
 }
 
