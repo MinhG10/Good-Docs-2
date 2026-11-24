@@ -70,32 +70,31 @@
   }
 
   
+/* ==========================================
+   GOOD DOCS v5.2
+   PRESERVE RICH TEXT FORMATTING
+   ========================================== */
+
 function sanitize(html) {
     const doc = new DOMParser().parseFromString(
-        '<div id="gooddocs-source">' +
-        String(html || '') +
-        '</div>',
+        '<div id="gd-source">' + String(html || '') + '</div>',
         'text/html'
     );
 
-    const source = doc.getElementById('gooddocs-source');
-
+    const source = doc.getElementById('gd-source');
     if (!source) return '';
 
-    // Những thẻ HTML được phép lưu
     const allowedTags = new Set([
         'P', 'DIV', 'SPAN', 'BR',
         'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
-        'STRONG', 'B', 'EM', 'I', 'U', 'S',
+        'B', 'STRONG', 'I', 'EM', 'U', 'S',
         'UL', 'OL', 'LI',
-        'BLOCKQUOTE',
-        'PRE', 'CODE',
+        'BLOCKQUOTE', 'PRE', 'CODE',
         'TABLE', 'THEAD', 'TBODY', 'TFOOT',
         'TR', 'TH', 'TD',
         'A', 'HR', 'SUB', 'SUP'
     ]);
 
-    // Loại bỏ cả nội dung của những thẻ nguy hiểm
     const blockedTags = new Set([
         'SCRIPT', 'STYLE', 'IFRAME',
         'OBJECT', 'EMBED', 'SVG', 'MATH',
@@ -103,13 +102,36 @@ function sanitize(html) {
         'SELECT', 'TEXTAREA', 'TEMPLATE',
         'LINK', 'META', 'BASE',
         'VIDEO', 'AUDIO', 'SOURCE',
-        'CANVAS'
+        'CANVAS', 'NOSCRIPT'
     ]);
 
     const output = document.createElement('div');
 
+    // Validate a CSS length.
+    function safeLength(value, min, max) {
+        const match = String(value || '')
+            .trim()
+            .match(/^(\d+(?:\.\d+)?)(px|pt|em|rem)$/i);
+
+        if (!match) return null;
+
+        const number = Number(match[1]);
+        const unit = match[2].toLowerCase();
+
+        // Approximate conversion to CSS pixels.
+        const px = number * ({
+            px: 1,
+            pt: 4 / 3,
+            em: 16,
+            rem: 16
+        })[unit];
+
+        if (px < min || px > max) return null;
+
+        return number + unit;
+    }
+
     function copyNode(node, parent) {
-        // Giữ nội dung văn bản
         if (node.nodeType === Node.TEXT_NODE) {
             parent.appendChild(
                 document.createTextNode(node.nodeValue)
@@ -117,18 +139,13 @@ function sanitize(html) {
             return;
         }
 
-        if (node.nodeType !== Node.ELEMENT_NODE) {
-            return;
-        }
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
 
         const tag = node.tagName.toUpperCase();
 
-        if (blockedTags.has(tag)) {
-            return;
-        }
+        if (blockedTags.has(tag)) return;
 
-        // Thẻ không hỗ trợ: giữ văn bản bên trong,
-        // nhưng không giữ bản thân thẻ.
+        // Unsupported tags: retain their text only.
         if (!allowedTags.has(tag)) {
             for (const child of node.childNodes) {
                 copyNode(child, parent);
@@ -140,113 +157,128 @@ function sanitize(html) {
             tag.toLowerCase()
         );
 
-        // Chỉ giữ các định dạng CSS an toàn.
-        const styles = [];
+        const style = node.style;
+        const safe = [];
 
-        const fontSize = node.style.fontSize.trim();
-
-        // Chỉ chấp nhận đơn vị font-size thông dụng.
-        // Giới hạn giá trị để tránh làm vỡ layout.
-        const sizeMatch = fontSize.match(
-            /^(\d+(?:\.\d+)?)(px|pt|em|rem|%)$/i
+        // 1. Font size
+        const size = safeLength(
+            style.fontSize, 6, 96
         );
 
-        if (sizeMatch) {
-            const value = Number(sizeMatch[1]);
-            const unit = sizeMatch[2].toLowerCase();
-
-            const limits = {
-                px: [8, 96],
-                pt: [6, 72],
-                em: [0.5, 6],
-                rem: [0.5, 6],
-                '%': [50, 600]
-            };
-
-            const [min, max] = limits[unit];
-
-            if (value >= min && value <= max) {
-                styles.push(
-                    `font-size:${value}${unit}`
-                );
+        if (size) {
+            safe.push(`font-size:${size}`);
+        } else {
+            // Relative font sizes, if present.
+            const m = style.fontSize.match(
+                /^(\d+(?:\.\d+)?)%$/
+            );
+            if (m) {
+                const n = Number(m[1]);
+                if (n >= 50 && n <= 300) {
+                    safe.push(`font-size:${n}%`);
+                }
             }
         }
 
-        // In đậm
-        const weight = node.style.fontWeight.trim();
+        // 2. Font weight
+        const weight = style.fontWeight.trim();
 
-        if (
-            /^(normal|bold|bolder|lighter|[1-9]00)$/i
-                .test(weight)
-        ) {
-            styles.push(
-                `font-weight:${weight.toLowerCase()}`
-            );
+        if (/^(normal|bold|bolder|lighter|[1-9]00)$/i.test(weight)) {
+            safe.push(`font-weight:${weight}`);
         }
 
-        // In nghiêng
-        const fontStyle = node.style.fontStyle.trim();
-
-        if (/^(normal|italic|oblique)$/i.test(fontStyle)) {
-            styles.push(
-                `font-style:${fontStyle.toLowerCase()}`
-            );
+        // 3. Italic
+        if (/^(normal|italic|oblique)$/i.test(style.fontStyle)) {
+            safe.push(`font-style:${style.fontStyle}`);
         }
 
-        // Gạch chân / gạch ngang
-        const decoration =
-            node.style.textDecorationLine.trim();
+        // 4. Text decoration
+        const decoration = style.textDecorationLine;
 
-        if (
-            /^(none|underline|line-through|overline)$/i
-                .test(decoration)
-        ) {
-            styles.push(
-                `text-decoration-line:${decoration.toLowerCase()}`
-            );
+        if (/^(underline|line-through|overline|none)$/i.test(decoration)) {
+            safe.push(`text-decoration-line:${decoration}`);
         }
 
-        // Căn lề văn bản
-        const align = node.style.textAlign.trim();
+        // 5. Line height
+        const lineHeight = style.lineHeight.trim();
 
-        if (
-            /^(left|right|center|justify|start|end)$/i
-                .test(align)
-        ) {
-            styles.push(
-                `text-align:${align.toLowerCase()}`
+        if (/^\d+(?:\.\d+)?$/.test(lineHeight)) {
+            const n = Number(lineHeight);
+
+            if (n >= 1 && n <= 3) {
+                safe.push(`line-height:${n}`);
+            }
+        } else {
+            const line = safeLength(
+                lineHeight, 8, 150
             );
+
+            if (line) {
+                safe.push(`line-height:${line}`);
+            }
         }
 
-        if (styles.length > 0) {
-            clean.setAttribute(
-                'style',
-                styles.join(';')
-            );
+        // 6. Space above and below paragraphs
+        const marginTop = safeLength(
+            style.marginTop, 0, 100
+        );
+
+        const marginBottom = safeLength(
+            style.marginBottom, 0, 100
+        );
+
+        if (marginTop) {
+            safe.push(`margin-top:${marginTop}`);
         }
 
-        // Chỉ giữ link HTTP(S) hoặc email hợp lệ.
+        if (marginBottom) {
+            safe.push(`margin-bottom:${marginBottom}`);
+        }
+
+        // 7. Text alignment
+        const align = style.textAlign.trim();
+
+        if (/^(left|right|center|justify|start|end)$/i.test(align)) {
+            safe.push(`text-align:${align}`);
+        }
+
+        // 8. Text indentation
+        const indent = safeLength(
+            style.textIndent, 0, 80
+        );
+
+        if (indent) {
+            safe.push(`text-indent:${indent}`);
+        }
+
+        // 9. Preserve basic block display
+        const display = style.display.trim();
+
+        if (/^(block|inline|inline-block)$/i.test(display)) {
+            safe.push(`display:${display}`);
+        }
+
+        if (safe.length) {
+            clean.setAttribute('style', safe.join(';'));
+        }
+
+        // Allow safe links only.
         if (tag === 'A') {
             const href = node.getAttribute('href');
 
             if (href) {
                 try {
                     const url = new URL(
-                        href,
-                        window.location.href
+                        href, window.location.href
                     );
 
-                    if (
-                        ['https:', 'http:', 'mailto:']
-                            .includes(url.protocol)
-                    ) {
+                    if (['http:', 'https:', 'mailto:']
+                        .includes(url.protocol)) {
                         clean.href = url.href;
                         clean.target = '_blank';
                         clean.rel = 'noopener noreferrer';
                     }
-                } catch {
-                    // Bỏ liên kết không hợp lệ.
-                }
+                } catch {}
             }
         }
 
@@ -263,6 +295,8 @@ function sanitize(html) {
 
     return output.innerHTML;
 }
+
+
 
 
   function closeSidebar() {
