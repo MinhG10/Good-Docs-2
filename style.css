@@ -1594,10 +1594,6 @@ input:focus-visible,
 
 /* Preserve individual font sizes */
 
-.editor [style*="font-size"] {
-    /* Use each element's inline font-size */
-    line-height: 1.4;
-}
 
 /* Headings */
 
@@ -1692,4 +1688,97 @@ input:focus-visible,
         line-height: 1.65;
     }
 }
+
+
+/* ==========================================
+   GOOD DOCS v5.2 - ARTICLE FORMATTING
+   ========================================== */
+
+.editor {
+    white-space: normal;
+    line-height: 1.65;
+    color: #ffffff;
+    overflow-wrap: anywhere;
+}
+
+/* Preserve HTML text dimensions */
+.editor [style*="font-size"] {
+    line-height: inherit;
+}
+
+/* Default paragraph spacing */
+.editor p {
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+
+/* Headings */
+.editor h1 {
+    font-size: 2em;
+    line-height: 1.3;
+    margin: 22px 0 14px;
+}
+
+.editor h2 {
+    font-size: 1.6em;
+    line-height: 1.35;
+    margin: 20px 0 12px;
+}
+
+.editor h3 {
+    font-size: 1.3em;
+    line-height: 1.4;
+    margin: 18px 0 10px;
+}
+
+/* Smaller supporting text remains smaller */
+.editor small {
+    font-size: 0.85em;
+}
+
+/* Divider between article sections */
+.editor hr {
+    display: block;
+    border: 0;
+    border-top: 1px solid #3b414a;
+    margin: 22px 0;
+    height: 0;
+}
+
+/* Preserve block spacing */
+.editor div,
+.editor blockquote {
+    overflow-wrap: anywhere;
+}
+
+/* Preserve text emphasis */
+.editor strong,
+.editor b {
+    font-weight: 750;
+}
+
+/* Keep Dark Mode */
+.editor,
+.editor * {
+    color: #ffffff !important;
+    max-width: 100% !important;
+}
+
+/* Muted text when explicitly marked */
+.editor a {
+    color: #aebdff !important;
+}
+
+/* Prevent pasted fixed widths */
+.editor > * {
+    max-width: 100% !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+    .editor {
+        padding: 16px;
+    }
+}
+
 
