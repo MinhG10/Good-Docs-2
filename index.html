@@ -13,19 +13,19 @@
 
     <meta name="theme-color" content="#101217">
 
-    <title>Good Docs v5..2.3</title>
+    <title>Good Docs v5.3</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="style.css?v=5.2.3">
+    <link rel="stylesheet" href="style.css?v=5.3">
 
     <!-- Configuration -->
     <script src="config.js" defer></script>
 
     <!-- Google Sheets API -->
-    <script src="sheets.js?v=5.2.3" defer></script>
+    <script src="sheets.js?v=5.3" defer></script>
 
     <!-- Main Application -->
-    <script src="app.js?v=5.2.3" defer></script>
+    <script src="app.js?v=5.3" defer></script>
 </head>
 
 <body>
@@ -47,6 +47,7 @@
             <div>
                 <strong>Good Docs</strong>
                 <small>Personal workspace</small>
+                <small class="brand-version">Version 5.3</small>
             </div>
 
             <button
@@ -192,20 +193,6 @@
                 Good Docs
             </span>
 
-            <span class="spacer"></span>
-
-            <!-- Automatic Save Status -->
-
-            <span
-                id="saveState"
-                class="muted small"
-                role="status"
-                aria-live="polite">
-
-                Đang tải...
-
-            </span>
-
         </header>
 
 
@@ -251,14 +238,21 @@
                     placeholder="Tiêu đề ghi chú"
                     maxlength="160">
 
-                <button
-                    id="deleteNote"
-                    class="danger-outline"
-                    title="Xóa ghi chú">
+                <div class="note-actions">
+                    <button
+                        id="renameNote"
+                        class="secondary"
+                        title="Đổi tên tab">
+                        Đổi tên
+                    </button>
 
-                    Xóa tab
-
-                </button>
+                    <button
+                        id="deleteNote"
+                        class="danger-outline"
+                        title="Xóa ghi chú">
+                        Xóa tab
+                    </button>
+                </div>
 
             </div>
 
@@ -297,6 +291,24 @@
                     id="noteIncrease"
                     title="Tăng cỡ chữ">
                     A+
+                </button>
+
+                <!-- Text highlights -->
+
+                <button
+                    id="noteHighlightYellow"
+                    class="highlight-button highlight-yellow"
+                    title="Tô nền vàng cho phần văn bản đang chọn"
+                    aria-label="Tô vàng">
+                    Vàng
+                </button>
+
+                <button
+                    id="noteHighlightRed"
+                    class="highlight-button highlight-red"
+                    title="Tô nền đỏ cho phần văn bản đang chọn"
+                    aria-label="Tô đỏ">
+                    Đỏ
                 </button>
 
                 <!-- Toolbar Hint -->

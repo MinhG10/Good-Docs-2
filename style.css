@@ -1,6 +1,6 @@
 
 /* ==================================================
-   GOOD DOCS v5.2.3
+   GOOD DOCS v5.3
    DARK MODE / FOLDERS / RICH TEXT / DICTIONARY
    ================================================== */
 
@@ -186,6 +186,12 @@ input:focus-visible,
 .brand small {
     color: var(--muted);
     font-size: 11px;
+}
+
+.brand-version {
+    color: #7f8aa3 !important;
+    font-size: 10px !important;
+    letter-spacing: .02em;
 }
 
 /* BUTTONS */
@@ -524,11 +530,6 @@ input:focus-visible,
     text-overflow: ellipsis;
 }
 
-#saveState {
-    font-size: 11px;
-    white-space: nowrap;
-}
-
 /* EMPTY VIEW */
 
 .empty {
@@ -619,9 +620,20 @@ input:focus-visible,
     color: #7e8799;
 }
 
+.note-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
 /* TOOLBAR */
 
 .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -633,6 +645,7 @@ input:focus-visible,
     padding: 8px 0 13px;
 
     border-bottom: 1px solid var(--border);
+    background: var(--bg);
 }
 
 .toolbar button {
@@ -653,6 +666,31 @@ input:focus-visible,
 
 .toolbar button:not(:disabled):hover {
     background: #343c4d;
+}
+
+.toolbar .highlight-button {
+    min-width: 48px;
+    font-weight: 700;
+}
+
+.toolbar .highlight-yellow {
+    background: #ffeb3b;
+    border-color: #ffeb3b;
+    color: #242424;
+}
+
+.toolbar .highlight-yellow:not(:disabled):hover {
+    background: #f6dc00;
+}
+
+.toolbar .highlight-red {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
+
+.toolbar .highlight-red:not(:disabled):hover {
+    background: #dc2626;
 }
 
 .toolbar .primary {
@@ -1271,21 +1309,13 @@ input:focus-visible,
         font-size: 14px;
     }
 
-    #saveState {
-        max-width: 125px;
-        font-size: 10px;
-
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
     .view {
         width: 100%;
         padding: 17px 13px 28px;
     }
 
     .doc-header {
+        align-items: flex-start;
         gap: 9px;
         margin-bottom: 14px;
     }
@@ -1299,6 +1329,16 @@ input:focus-visible,
     }
 
     .danger-outline {
+        padding: 7px 9px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .note-actions {
+        gap: 5px;
+    }
+
+    .note-actions .secondary {
         padding: 7px 9px;
         font-size: 11px;
         white-space: nowrap;

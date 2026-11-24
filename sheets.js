@@ -1,7 +1,7 @@
 
 /*
  * =========================================================
- * GOOD DOCS v5.1 - GOOGLE SHEETS CONNECTION
+ * GOOD DOCS v5.3 - GOOGLE SHEETS CONNECTION
  * =========================================================
  *
  * Architecture:
@@ -521,7 +521,7 @@ window.GoodDocsCloud = (() => {
     ) {
 
       throw new Error(
-        'Dữ liệu vượt giới hạn lưu trữ của Good Docs v5.1 (1,2 triệu ký tự Base64).'
+        'Dữ liệu vượt giới hạn lưu trữ của Good Docs v5.3 (1,2 triệu ký tự Base64).'
       );
     }
 

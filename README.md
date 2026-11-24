@@ -1,4 +1,4 @@
-# Good Docs v5.0 — GitHub Pages + Google Apps Script + Google Sheets
+# Good Docs v5.3 — GitHub Pages + Google Apps Script + Google Sheets
 
 Website frontend chạy **trên GitHub Pages**, Google Sheets là database, Apps Script là API trung gian. Không cần OAuth Client ID trên frontend, không cần đăng nhập Google khi sử dụng Good Docs.
 

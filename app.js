@@ -2,7 +2,7 @@
 'use strict';
 
 (() => {
-  // GOOD DOCS v5.2.3
+  // GOOD DOCS v5.3
   const $ = id => document.getElementById(id);
   const cloud = window.GoodDocsCloud;
 
@@ -48,7 +48,6 @@
   }
 
   function status(message) {
-    $('saveState').textContent = message;
     $('syncLabel').textContent = message;
   }
 
@@ -186,6 +185,24 @@
       const fontStyle = style.fontStyle.trim();
       if (/^(normal|italic|oblique)$/i.test(fontStyle)) {
         safe.push(`font-style:${fontStyle}`);
+      }
+
+      // Allow only the two highlight colors provided by Good Docs.
+      const backgroundColor = style.backgroundColor
+        .replace(/\s+/g, '')
+        .toLowerCase();
+
+      const highlightColors = new Map([
+        ['#ffeb3b', '#ffeb3b'],
+        ['rgb(255,235,59)', '#ffeb3b'],
+        ['#ef4444', '#ef4444'],
+        ['rgb(239,68,68)', '#ef4444']
+      ]);
+
+      if (highlightColors.has(backgroundColor)) {
+        safe.push(
+          `background-color:${highlightColors.get(backgroundColor)}`
+        );
       }
 
       // Text decoration.
@@ -730,10 +747,51 @@
     mark();
   }
 
+  function renameNote() {
+    const n = note();
+    if (!n || st.blocked) return;
+
+    const raw = prompt('Đổi tên tab:', n.title);
+    if (raw === null) return;
+
+    const title = raw.trim().slice(0, 160);
+    if (!title) return toast('Tên tab không được để trống.');
+
+    n.title = title;
+    $('noteTitle').value = title;
+    $('pageTitle').textContent = title;
+    list();
+    mark();
+  }
+
   function execBold() {
     if (st.mode !== 'note') return;
     $('noteEditor').focus();
     document.execCommand('bold', false);
+    syncEditor();
+    mark();
+  }
+
+  function highlightNote(color) {
+    if (st.mode !== 'note' || st.blocked) return;
+
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed ||
+        !$('noteEditor').contains(selection.anchorNode) ||
+        !$('noteEditor').contains(selection.focusNode)) {
+      return toast('Hãy bôi đen từ hoặc đoạn cần tô màu.');
+    }
+
+    $('noteEditor').focus();
+
+    const applied = document.execCommand(
+      'hiliteColor', false, color
+    );
+
+    if (!applied) {
+      document.execCommand('backColor', false, color);
+    }
+
     syncEditor();
     mark();
   }
@@ -1008,6 +1066,7 @@
   function bind() {
     $('newNote').onclick = () => createNote(null);
     $('newFolder').onclick = createFolder;
+    $('renameNote').onclick = renameNote;
     $('deleteNote').onclick = deleteNote;
 
     $('dictionaryNav').onclick = openDict;
@@ -1038,6 +1097,17 @@
     $('noteBold').onclick = execBold;
     $('noteIncrease').onclick = () => fontNote(2);
     $('noteDecrease').onclick = () => fontNote(-2);
+    $('noteHighlightYellow').onclick = () => highlightNote('#ffeb3b');
+    $('noteHighlightRed').onclick = () => highlightNote('#ef4444');
+
+    // Keep the editor selection when a formatting button is clicked.
+    for (const id of [
+      'noteBold',
+      'noteHighlightYellow',
+      'noteHighlightRed'
+    ]) {
+      $(id).addEventListener('mousedown', e => e.preventDefault());
+    }
 
     $('editToggle').onclick = toggleEdit;
     $('addRow').onclick = addRow;
