@@ -2,7 +2,7 @@
 'use strict';
 
 (() => {
-  // GOOD DOCS v5.3
+  // GOOD DOCS v5.5
   const $ = id => document.getElementById(id);
   const cloud = window.GoodDocsCloud;
 
@@ -86,7 +86,7 @@
       'P', 'DIV', 'SPAN', 'BR',
       'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
       'B', 'STRONG', 'I', 'EM', 'U', 'S',
-      'SMALL', 'MARK',
+      'SMALL', 'MARK', 'FONT',
       'UL', 'OL', 'LI',
       'BLOCKQUOTE', 'PRE', 'CODE',
       'TABLE', 'THEAD', 'TBODY', 'TFOOT',
@@ -166,7 +166,9 @@
         return;
       }
 
-      const clean = document.createElement(tag.toLowerCase());
+      const clean = document.createElement(
+        tag === 'FONT' ? 'span' : tag.toLowerCase()
+      );
       const style = node.style;
       const safe = [];
 
@@ -187,44 +189,53 @@
         safe.push(`font-style:${fontStyle}`);
       }
 
-      // Allow only the two highlight colors provided by Good Docs.
+      // Allow only the two text colors provided by Good Docs.
       const backgroundColor = style.backgroundColor
         .replace(/\s+/g, '')
         .toLowerCase();
+      const textColor = String(
+        style.color || node.getAttribute('color') || ''
+      )
+        .replace(/\s+/g, '')
+        .toLowerCase();
 
-      const highlightColors = new Map([
-        // Current accessible colors.
-        ['#fef3c7', ['#fef3c7', '#1f2937']],
-        ['rgb(254,243,199)', ['#fef3c7', '#1f2937']],
-        ['#7f1d1d', ['#7f1d1d', '#fee2e2']],
-        ['rgb(127,29,29)', ['#7f1d1d', '#fee2e2']],
-
-        // Migrate highlights saved by earlier v5.3 releases.
-        ['#fff3a3', ['#fef3c7', '#1f2937']],
-        ['rgb(255,243,163)', ['#fef3c7', '#1f2937']],
-        ['#ffeb3b', ['#fef3c7', '#1f2937']],
-        ['rgb(255,235,59)', ['#fef3c7', '#1f2937']],
-        ['#ffc7c7', ['#7f1d1d', '#fee2e2']],
-        ['rgb(255,199,199)', ['#7f1d1d', '#fee2e2']],
-        ['#ef4444', ['#7f1d1d', '#fee2e2']],
-        ['rgb(239,68,68)', ['#7f1d1d', '#fee2e2']]
+      const savedTextColors = new Map([
+        ['#3fb950', '#3fb950'],
+        ['rgb(63,185,80)', '#3fb950'],
+        ['#d97745', '#d97745'],
+        ['rgb(217,119,69)', '#d97745'],
+        ['#f4f5f9', '#f4f5f9'],
+        ['rgb(244,245,249)', '#f4f5f9'],
+        ['#ffffff', '#f4f5f9'],
+        ['rgb(255,255,255)', '#f4f5f9']
       ]);
 
-      if (highlightColors.has(backgroundColor)) {
-        const [highlight, foreground] =
-          highlightColors.get(backgroundColor);
+      // Convert background highlights from v5.3/v5.4 to text colors.
+      const legacyBackgrounds = new Map([
+        ['#166534', '#3fb950'],
+        ['rgb(22,101,52)', '#3fb950'],
+        ['#fef3c7', '#3fb950'],
+        ['rgb(254,243,199)', '#3fb950'],
+        ['#fff3a3', '#3fb950'],
+        ['rgb(255,243,163)', '#3fb950'],
+        ['#ffeb3b', '#3fb950'],
+        ['rgb(255,235,59)', '#3fb950'],
+        ['#1e40af', '#d97745'],
+        ['rgb(30,64,175)', '#d97745'],
+        ['#7f1d1d', '#d97745'],
+        ['rgb(127,29,29)', '#d97745'],
+        ['#ffc7c7', '#d97745'],
+        ['rgb(255,199,199)', '#d97745'],
+        ['#ef4444', '#d97745'],
+        ['rgb(239,68,68)', '#d97745'],
+        ['#181b22', '#f4f5f9'],
+        ['rgb(24,27,34)', '#f4f5f9']
+      ]);
 
-        safe.push(
-          `background-color:${highlight}`,
-          `color:${foreground}`
-        );
-      } else if ([
-        '#181b22',
-        'rgb(24,27,34)'
-      ].includes(backgroundColor)) {
-        // Default editor colors can override part of a highlighted span.
-        safe.push('background-color:#181b22', 'color:#ffffff');
-      }
+      const migratedColor = legacyBackgrounds.get(backgroundColor);
+      const allowedColor = migratedColor || savedTextColors.get(textColor);
+
+      if (allowedColor) safe.push(`color:${allowedColor}`);
 
       // Text decoration.
       const decoration = style.textDecorationLine.trim();
@@ -793,55 +804,35 @@
     mark();
   }
 
-  function highlightNote(color, foreground) {
+  function colorNoteText(color) {
     if (st.mode !== 'note' || st.blocked) return;
 
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed ||
         !$('noteEditor').contains(selection.anchorNode) ||
         !$('noteEditor').contains(selection.focusNode)) {
-      return toast('Hãy bôi đen từ hoặc đoạn cần tô màu.');
+      return toast('Hãy bôi đen từ hoặc đoạn cần đổi màu chữ.');
     }
 
     $('noteEditor').focus();
-
-    const applied = document.execCommand(
-      'hiliteColor', false, color
-    );
-
-    if (!applied) {
-      document.execCommand('backColor', false, color);
-    }
-
-    document.execCommand('foreColor', false, foreground);
+    document.execCommand('foreColor', false, color);
 
     syncEditor();
     mark();
   }
 
-  function resetNoteHighlight() {
+  function resetNoteTextColor() {
     if (st.mode !== 'note' || st.blocked) return;
 
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed ||
         !$('noteEditor').contains(selection.anchorNode) ||
         !$('noteEditor').contains(selection.focusNode)) {
-      return toast('Hãy bôi đen từ hoặc đoạn cần bỏ màu nền.');
+      return toast('Hãy bôi đen từ hoặc đoạn cần trả về màu chữ mặc định.');
     }
 
     $('noteEditor').focus();
-
-    const cleared = document.execCommand(
-      'hiliteColor', false, '#181b22'
-    );
-
-    if (!cleared) {
-      document.execCommand('backColor', false, '#181b22');
-    }
-
-    // Highlighted text uses a dark foreground for contrast.
-    // Restore the editor's default text color when removing the background.
-    document.execCommand('foreColor', false, '#ffffff');
+    document.execCommand('foreColor', false, '#f4f5f9');
 
     syncEditor();
     mark();
@@ -1148,20 +1139,20 @@
     $('noteBold').onclick = execBold;
     $('noteIncrease').onclick = () => fontNote(2);
     $('noteDecrease').onclick = () => fontNote(-2);
-    $('noteHighlightYellow').onclick = () => {
-      highlightNote('#fef3c7', '#1f2937');
+    $('noteTextGreen').onclick = () => {
+      colorNoteText('#3fb950');
     };
-    $('noteHighlightRed').onclick = () => {
-      highlightNote('#7f1d1d', '#fee2e2');
+    $('noteTextOrange').onclick = () => {
+      colorNoteText('#d97745');
     };
-    $('noteHighlightReset').onclick = resetNoteHighlight;
+    $('noteTextReset').onclick = resetNoteTextColor;
 
     // Keep the editor selection when a formatting button is clicked.
     for (const id of [
       'noteBold',
-      'noteHighlightYellow',
-      'noteHighlightRed',
-      'noteHighlightReset'
+      'noteTextGreen',
+      'noteTextOrange',
+      'noteTextReset'
     ]) {
       $(id).addEventListener('mousedown', e => e.preventDefault());
     }

@@ -1,6 +1,6 @@
 
 /* ==================================================
-   GOOD DOCS v5.3
+   GOOD DOCS v5.5
    DARK MODE / FOLDERS / RICH TEXT / DICTIONARY
    ================================================== */
 
@@ -668,38 +668,34 @@ input:focus-visible,
     background: #343c4d;
 }
 
-.toolbar .highlight-button {
+.toolbar .text-color-button {
     min-width: 48px;
     font-weight: 700;
 }
 
-.toolbar .highlight-yellow {
-    background: #fef3c7;
-    border-color: #fef3c7;
-    color: #1f2937;
+.toolbar .text-green {
+    color: #3fb950;
 }
 
-.toolbar .highlight-yellow:not(:disabled):hover {
-    background: #fde68a;
+.toolbar .text-green:not(:disabled):hover {
+    color: #56d364;
 }
 
-.toolbar .highlight-red {
-    background: #7f1d1d;
-    border-color: #7f1d1d;
-    color: #fee2e2;
+.toolbar .text-orange {
+    color: #d97745;
 }
 
-.toolbar .highlight-red:not(:disabled):hover {
-    background: #991b1b;
+.toolbar .text-orange:not(:disabled):hover {
+    color: #f0883e;
 }
 
-.toolbar .highlight-reset {
+.toolbar .text-reset {
     min-width: 68px;
     background: #2a303b;
     color: #e7ecf7;
 }
 
-.toolbar .highlight-reset:not(:disabled):hover {
+.toolbar .text-reset:not(:disabled):hover {
     background: #3a4352;
 }
 
