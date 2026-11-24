@@ -239,7 +239,7 @@
 
       // Text decoration.
       const decoration = style.textDecorationLine.trim();
-      if (/^(none|underline|line-through|overline)$/i
+      if (/^(none|(?:underline|line-through|overline)(?:\s+(?:underline|line-through|overline))*)$/i
           .test(decoration)) {
         safe.push(`text-decoration-line:${decoration}`);
       }
@@ -796,10 +796,10 @@
     mark();
   }
 
-  function execBold() {
+  function formatNoteText(command) {
     if (st.mode !== 'note') return;
-    $('noteEditor').focus();
-    document.execCommand('bold', false);
+    $('noteEditor').focus({ preventScroll: true });
+    if (!document.execCommand(command, false)) return;
     syncEditor();
     mark();
   }
@@ -1125,7 +1125,9 @@
 
     $('noteEditor').addEventListener('paste', pasteRichText);
 
-    $('noteBold').onclick = execBold;
+    $('noteBold').onclick = () => formatNoteText('bold');
+    $('noteItalic').onclick = () => formatNoteText('italic');
+    $('noteUnderline').onclick = () => formatNoteText('underline');
     $('noteIncrease').onclick = () => fontNote(2);
     $('noteDecrease').onclick = () => fontNote(-2);
     $('noteTextGreen').onclick = () => {
@@ -1141,6 +1143,8 @@
     // Keep the editor selection when a formatting button is clicked.
     for (const id of [
       'noteBold',
+      'noteItalic',
+      'noteUnderline',
       'noteTextGreen',
       'noteTextOrange',
       'noteTextReset'
