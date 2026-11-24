@@ -69,24 +69,201 @@
     $('dictionaryNav').disabled = !ready;
   }
 
-  function sanitize(html) {
+  
+function sanitize(html) {
     const doc = new DOMParser().parseFromString(
-      '<div>' + String(html || '') + '</div>',
-      'text/html'
+        '<div id="gooddocs-source">' +
+        String(html || '') +
+        '</div>',
+        'text/html'
     );
 
-    doc.querySelectorAll(
-      'script,style,iframe,object,embed,svg,math,form,link,meta,base'
-    ).forEach(el => el.remove());
+    const source = doc.getElementById('gooddocs-source');
 
-    doc.body.querySelectorAll('*').forEach(el => {
-      for (const attr of [...el.attributes]) {
-        el.removeAttribute(attr.name);
-      }
-    });
+    if (!source) return '';
 
-    return doc.body.firstElementChild?.innerHTML || '';
-  }
+    // Những thẻ HTML được phép lưu
+    const allowedTags = new Set([
+        'P', 'DIV', 'SPAN', 'BR',
+        'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+        'STRONG', 'B', 'EM', 'I', 'U', 'S',
+        'UL', 'OL', 'LI',
+        'BLOCKQUOTE',
+        'PRE', 'CODE',
+        'TABLE', 'THEAD', 'TBODY', 'TFOOT',
+        'TR', 'TH', 'TD',
+        'A', 'HR', 'SUB', 'SUP'
+    ]);
+
+    // Loại bỏ cả nội dung của những thẻ nguy hiểm
+    const blockedTags = new Set([
+        'SCRIPT', 'STYLE', 'IFRAME',
+        'OBJECT', 'EMBED', 'SVG', 'MATH',
+        'FORM', 'INPUT', 'BUTTON',
+        'SELECT', 'TEXTAREA', 'TEMPLATE',
+        'LINK', 'META', 'BASE',
+        'VIDEO', 'AUDIO', 'SOURCE',
+        'CANVAS'
+    ]);
+
+    const output = document.createElement('div');
+
+    function copyNode(node, parent) {
+        // Giữ nội dung văn bản
+        if (node.nodeType === Node.TEXT_NODE) {
+            parent.appendChild(
+                document.createTextNode(node.nodeValue)
+            );
+            return;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return;
+        }
+
+        const tag = node.tagName.toUpperCase();
+
+        if (blockedTags.has(tag)) {
+            return;
+        }
+
+        // Thẻ không hỗ trợ: giữ văn bản bên trong,
+        // nhưng không giữ bản thân thẻ.
+        if (!allowedTags.has(tag)) {
+            for (const child of node.childNodes) {
+                copyNode(child, parent);
+            }
+            return;
+        }
+
+        const clean = document.createElement(
+            tag.toLowerCase()
+        );
+
+        // Chỉ giữ các định dạng CSS an toàn.
+        const styles = [];
+
+        const fontSize = node.style.fontSize.trim();
+
+        // Chỉ chấp nhận đơn vị font-size thông dụng.
+        // Giới hạn giá trị để tránh làm vỡ layout.
+        const sizeMatch = fontSize.match(
+            /^(\d+(?:\.\d+)?)(px|pt|em|rem|%)$/i
+        );
+
+        if (sizeMatch) {
+            const value = Number(sizeMatch[1]);
+            const unit = sizeMatch[2].toLowerCase();
+
+            const limits = {
+                px: [8, 96],
+                pt: [6, 72],
+                em: [0.5, 6],
+                rem: [0.5, 6],
+                '%': [50, 600]
+            };
+
+            const [min, max] = limits[unit];
+
+            if (value >= min && value <= max) {
+                styles.push(
+                    `font-size:${value}${unit}`
+                );
+            }
+        }
+
+        // In đậm
+        const weight = node.style.fontWeight.trim();
+
+        if (
+            /^(normal|bold|bolder|lighter|[1-9]00)$/i
+                .test(weight)
+        ) {
+            styles.push(
+                `font-weight:${weight.toLowerCase()}`
+            );
+        }
+
+        // In nghiêng
+        const fontStyle = node.style.fontStyle.trim();
+
+        if (/^(normal|italic|oblique)$/i.test(fontStyle)) {
+            styles.push(
+                `font-style:${fontStyle.toLowerCase()}`
+            );
+        }
+
+        // Gạch chân / gạch ngang
+        const decoration =
+            node.style.textDecorationLine.trim();
+
+        if (
+            /^(none|underline|line-through|overline)$/i
+                .test(decoration)
+        ) {
+            styles.push(
+                `text-decoration-line:${decoration.toLowerCase()}`
+            );
+        }
+
+        // Căn lề văn bản
+        const align = node.style.textAlign.trim();
+
+        if (
+            /^(left|right|center|justify|start|end)$/i
+                .test(align)
+        ) {
+            styles.push(
+                `text-align:${align.toLowerCase()}`
+            );
+        }
+
+        if (styles.length > 0) {
+            clean.setAttribute(
+                'style',
+                styles.join(';')
+            );
+        }
+
+        // Chỉ giữ link HTTP(S) hoặc email hợp lệ.
+        if (tag === 'A') {
+            const href = node.getAttribute('href');
+
+            if (href) {
+                try {
+                    const url = new URL(
+                        href,
+                        window.location.href
+                    );
+
+                    if (
+                        ['https:', 'http:', 'mailto:']
+                            .includes(url.protocol)
+                    ) {
+                        clean.href = url.href;
+                        clean.target = '_blank';
+                        clean.rel = 'noopener noreferrer';
+                    }
+                } catch {
+                    // Bỏ liên kết không hợp lệ.
+                }
+            }
+        }
+
+        for (const child of node.childNodes) {
+            copyNode(child, clean);
+        }
+
+        parent.appendChild(clean);
+    }
+
+    for (const child of source.childNodes) {
+        copyNode(child, output);
+    }
+
+    return output.innerHTML;
+}
+
 
   function closeSidebar() {
     $('sidebar').classList.remove('open');
@@ -1025,6 +1202,47 @@
         mark();
       }
     );
+
+    
+// GOOD DOCS v5.2
+// Paste HTML and preserve safe text formatting.
+
+$('noteEditor').addEventListener('paste', e => {
+    if (!st.connected || st.blocked) return;
+
+    const clipboard = e.clipboardData;
+
+    if (!clipboard) return;
+
+    const html = clipboard.getData('text/html');
+    const text = clipboard.getData('text/plain');
+
+    e.preventDefault();
+
+    $('noteEditor').focus();
+
+    if (html && html.trim()) {
+        // Keep supported rich-text formatting.
+        const cleanHTML = sanitize(html);
+
+        document.execCommand(
+            'insertHTML',
+            false,
+            cleanHTML
+        );
+    } else {
+        // Plain text fallback.
+        document.execCommand(
+            'insertText',
+            false,
+            text
+        );
+    }
+
+    syncEditor();
+    mark();
+});
+
 
     $('noteBold').onclick = execBold;
 
