@@ -193,23 +193,30 @@
         .toLowerCase();
 
       const highlightColors = new Map([
-        // Current lighter colors.
-        ['#fff3a3', '#fff3a3'],
-        ['rgb(255,243,163)', '#fff3a3'],
-        ['#ffc7c7', '#ffc7c7'],
-        ['rgb(255,199,199)', '#ffc7c7'],
+        // Current accessible colors.
+        ['#fef3c7', ['#fef3c7', '#1f2937']],
+        ['rgb(254,243,199)', ['#fef3c7', '#1f2937']],
+        ['#7f1d1d', ['#7f1d1d', '#fee2e2']],
+        ['rgb(127,29,29)', ['#7f1d1d', '#fee2e2']],
 
-        // Migrate highlights saved by the first v5.3 release.
-        ['#ffeb3b', '#fff3a3'],
-        ['rgb(255,235,59)', '#fff3a3'],
-        ['#ef4444', '#ffc7c7'],
-        ['rgb(239,68,68)', '#ffc7c7']
+        // Migrate highlights saved by earlier v5.3 releases.
+        ['#fff3a3', ['#fef3c7', '#1f2937']],
+        ['rgb(255,243,163)', ['#fef3c7', '#1f2937']],
+        ['#ffeb3b', ['#fef3c7', '#1f2937']],
+        ['rgb(255,235,59)', ['#fef3c7', '#1f2937']],
+        ['#ffc7c7', ['#7f1d1d', '#fee2e2']],
+        ['rgb(255,199,199)', ['#7f1d1d', '#fee2e2']],
+        ['#ef4444', ['#7f1d1d', '#fee2e2']],
+        ['rgb(239,68,68)', ['#7f1d1d', '#fee2e2']]
       ]);
 
       if (highlightColors.has(backgroundColor)) {
+        const [highlight, foreground] =
+          highlightColors.get(backgroundColor);
+
         safe.push(
-          `background-color:${highlightColors.get(backgroundColor)}`,
-          'color:#1f2937'
+          `background-color:${highlight}`,
+          `color:${foreground}`
         );
       } else if ([
         '#181b22',
@@ -786,7 +793,7 @@
     mark();
   }
 
-  function highlightNote(color) {
+  function highlightNote(color, foreground) {
     if (st.mode !== 'note' || st.blocked) return;
 
     const selection = window.getSelection();
@@ -806,7 +813,7 @@
       document.execCommand('backColor', false, color);
     }
 
-    document.execCommand('foreColor', false, '#1f2937');
+    document.execCommand('foreColor', false, foreground);
 
     syncEditor();
     mark();
@@ -1141,8 +1148,12 @@
     $('noteBold').onclick = execBold;
     $('noteIncrease').onclick = () => fontNote(2);
     $('noteDecrease').onclick = () => fontNote(-2);
-    $('noteHighlightYellow').onclick = () => highlightNote('#fff3a3');
-    $('noteHighlightRed').onclick = () => highlightNote('#ffc7c7');
+    $('noteHighlightYellow').onclick = () => {
+      highlightNote('#fef3c7', '#1f2937');
+    };
+    $('noteHighlightRed').onclick = () => {
+      highlightNote('#7f1d1d', '#fee2e2');
+    };
     $('noteHighlightReset').onclick = resetNoteHighlight;
 
     // Keep the editor selection when a formatting button is clicked.

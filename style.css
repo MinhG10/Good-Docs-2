@@ -674,23 +674,23 @@ input:focus-visible,
 }
 
 .toolbar .highlight-yellow {
-    background: #fff3a3;
-    border-color: #fff3a3;
+    background: #fef3c7;
+    border-color: #fef3c7;
     color: #1f2937;
 }
 
 .toolbar .highlight-yellow:not(:disabled):hover {
-    background: #ffe979;
+    background: #fde68a;
 }
 
 .toolbar .highlight-red {
-    background: #ffc7c7;
-    border-color: #ffc7c7;
-    color: #1f2937;
+    background: #7f1d1d;
+    border-color: #7f1d1d;
+    color: #fee2e2;
 }
 
 .toolbar .highlight-red:not(:disabled):hover {
-    background: #ffaaaa;
+    background: #991b1b;
 }
 
 .toolbar .highlight-reset {
