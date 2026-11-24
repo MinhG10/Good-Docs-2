@@ -1782,3 +1782,133 @@ input:focus-visible,
 }
 
 
+/* ==========================================
+   GOOD DOCS v5.2.2
+   RICH TEXT SPACING FIX
+   ========================================== */
+
+/* Khung soạn thảo */
+.editor {
+    white-space: normal;
+    line-height: 1.65;
+    color: #ffffff;
+}
+
+/* Cho phép nội dung dùng font-size riêng */
+.editor [style*="font-size"] {
+    font-size: revert-layer;
+}
+
+/* Giữ khoảng cách giữa các đoạn */
+.editor p {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* Khoảng cách cho các DIV ở cấp đầu tiên */
+.editor > div {
+    margin-bottom: 12px;
+}
+
+/* Khoảng cách cho tiêu đề */
+.editor h1,
+.editor h2,
+.editor h3,
+.editor h4 {
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+
+/* Đường kẻ phân cách */
+.editor hr {
+    display: block;
+    border: none;
+    border-top: 1px solid #3b414a;
+    margin: 22px 0;
+    height: 0;
+}
+
+/* Đảm bảo chữ vẫn sáng trong Dark Mode */
+.editor,
+.editor * {
+    color: #ffffff !important;
+}
+```
+
+**Lưu ý:** Quy tắc `font-size: revert-layer` ở trên không cần thiết và có thể ảnh hưởng tới một số stylesheet. Bạn nên bỏ riêng khối `.editor [style*="font-size"]` này; kích thước nội tuyến được giữ khi không có CSS `font-size: ... !important` ghi đè.
+
+Đoạn CSS còn lại sẽ giúp nội dung dễ đọc hơn, nhưng chưa tự khôi phục đường phân cách nếu HTML được dán không chứa `<hr>`.
+
+## 2. Sửa `app.js` — Giữ đường phân cách của HTML nguồn
+
+Trong hàm `sanitize()`, tìm đoạn:
+
+```javascript
+const style = node.style;
+const safe = [];
+```
+
+Sau đoạn xử lý `marginBottom`, thêm:
+
+<CodeBlock language="javascript" editable>
+// 10. Preserve safe horizontal dividers
+const borderBottom = style.borderBottom.trim();
+
+const borderMatch = borderBottom.match(
+    /^(\d+(?:\.\d+)?)px\s+(solid|dashed)\s+(#[0-9a-fA-F]{3,8}|rgba?\([0-9.,%\s]+\))$/i
+);
+
+if (borderMatch) {
+    const width = Number(borderMatch[1]);
+
+    if (width >= 0.5 && width <= 3) {
+        // Use the Good Docs neutral divider color
+        safe.push(
+            `border-bottom:${width}px ${borderMatch[2]} #3b414a`
+        );
+    }
+}
+```
+
+Điều này bảo toàn đường phân cách nếu HTML copy có thuộc tính `border-bottom` nội tuyến. Nó không thể khôi phục đường kẻ vốn chỉ được định nghĩa qua CSS class của website nguồn.
+
+## 3. Giải pháp để giữ đúng định dạng như ảnh đầu tiên
+
+Mình nhận thấy trang nguồn của bạn có các nút:
+
+- Copy TXT
+- Xuất TXT
+- **Xuất HTML**
+
+Đây là điểm rất hữu ích. Vì bạn đang sử dụng công cụ tự tạo bài báo song ngữ, **cách đáng tin cậy nhất là để công cụ nguồn xuất HTML có chứa đầy đủ định dạng**, ví dụ:
+
+<CodeBlock language="html" editable>
+<section class="bilingual-article">
+
+  <div style="margin-bottom:22px;
+              padding-bottom:20px;
+              border-bottom:1px solid #3b414a;">
+
+    <p style="font-size:20px;
+              font-weight:600;
+              line-height:1.55;
+              margin:0 0 8px;">
+      Authorities in southern Vietnam are seeking
+      feedback on a plan to develop outlet
+      shopping centers.
+    </p>
+
+    <p style="font-size:14px;
+              line-height:1.75;
+              margin:0;">
+      Các cơ quan chức năng tại miền Nam Việt Nam
+      đang lấy ý kiến về kế hoạch phát triển
+      các trung tâm mua sắm.
+    </p>
+
+  </div>
+
+</section>
+
+
+
