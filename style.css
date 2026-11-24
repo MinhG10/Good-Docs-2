@@ -1,13 +1,8 @@
 
-/* =========================================================
-   GOOD DOCS v5.1
-   DARK MODE - FOLDERS - NOTES - DICTIONARY - MOBILE
-   ========================================================= */
-
-
-/* =========================================================
-   1. THEME VARIABLES
-   ========================================================= */
+/* ==================================================
+   GOOD DOCS v5.2.3
+   DARK MODE / FOLDERS / RICH TEXT / DICTIONARY
+   ================================================== */
 
 :root {
     color-scheme: dark;
@@ -27,21 +22,16 @@
 
     --primary: #6478ed;
     --primary-hover: #7a8bf5;
-    --primary-text: #ffffff;
 
     --danger: #f47b83;
     --success: #4adea0;
 
-    --radius: 9px;
     --sidebar-width: 272px;
-
-    --shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+    --radius: 9px;
+    --shadow: 0 12px 40px rgba(0,0,0,.28);
 }
 
-
-/* =========================================================
-   2. GLOBAL RESET
-   ========================================================= */
+/* GLOBAL */
 
 * {
     box-sizing: border-box;
@@ -57,28 +47,19 @@ body {
     margin: 0;
     min-height: 100vh;
     min-height: 100dvh;
-
     background: var(--bg);
     color: var(--text);
 
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
+    font-family: Inter, -apple-system,
+        BlinkMacSystemFont, "Segoe UI",
+        Arial, sans-serif;
 
     font-size: 14px;
     line-height: 1.6;
-
     -webkit-font-smoothing: antialiased;
 }
 
-button,
-input,
-textarea,
-select {
+button, input, textarea, select {
     font: inherit;
 }
 
@@ -88,12 +69,11 @@ button {
 }
 
 button:disabled {
-    opacity: 0.38;
+    opacity: .38;
     cursor: not-allowed;
 }
 
-input,
-textarea {
+input, textarea {
     color: var(--text);
 }
 
@@ -111,7 +91,7 @@ input:focus-visible,
 
 ::selection {
     background: #596ee3;
-    color: #ffffff;
+    color: #fff;
 }
 
 .hidden {
@@ -134,37 +114,29 @@ input:focus-visible,
     flex: 1;
 }
 
-
-/* =========================================================
-   3. MAIN APPLICATION LAYOUT
-   ========================================================= */
+/* MAIN LAYOUT */
 
 .layout {
     display: flex;
-
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
-
     background: var(--bg);
 }
 
-
-/* =========================================================
-   4. SIDEBAR
-   ========================================================= */
+/* SIDEBAR */
 
 .sidebar {
     position: sticky;
     top: 0;
 
+    display: flex;
+    flex-direction: column;
+
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     height: 100vh;
     height: 100dvh;
-
-    display: flex;
-    flex-direction: column;
 
     background: var(--sidebar);
     border-right: 1px solid var(--border);
@@ -173,38 +145,29 @@ input:focus-visible,
     z-index: 100;
 }
 
-
-/* =========================================================
-   5. BRAND
-   ========================================================= */
-
 .brand {
     display: flex;
     align-items: center;
     gap: 11px;
-
-    padding: 20px 14px 19px;
     min-height: 78px;
-
+    padding: 20px 14px 19px;
     border-bottom: 1px solid var(--border);
 }
 
 .brand-icon {
-    width: 37px;
-    height: 37px;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: var(--primary);
-    color: white;
+    width: 37px;
+    height: 37px;
 
+    background: var(--primary);
+    color: #fff;
     border-radius: 10px;
 
     font-size: 20px;
     font-weight: 750;
-
     flex-shrink: 0;
 }
 
@@ -215,7 +178,7 @@ input:focus-visible,
 }
 
 .brand strong {
-    color: #ffffff;
+    color: #fff;
     font-size: 16px;
     line-height: 1.3;
 }
@@ -225,10 +188,7 @@ input:focus-visible,
     font-size: 11px;
 }
 
-
-/* =========================================================
-   6. BUTTONS
-   ========================================================= */
+/* BUTTONS */
 
 .icon-btn {
     display: inline-flex;
@@ -237,25 +197,18 @@ input:focus-visible,
 
     min-width: 30px;
     min-height: 30px;
-
     padding: 5px 7px;
 
     border: 1px solid transparent;
     border-radius: 7px;
-
     background: transparent;
     color: var(--muted);
-
     font-size: 17px;
-
-    transition:
-        background 0.15s ease,
-        color 0.15s ease;
 }
 
 .icon-btn:hover {
     background: var(--surface-hover);
-    color: white;
+    color: #fff;
 }
 
 .primary {
@@ -264,13 +217,11 @@ input:focus-visible,
     justify-content: center;
 
     padding: 9px 15px;
-
     background: var(--primary);
-    color: var(--primary-text);
+    color: #fff;
 
     border: 1px solid transparent;
     border-radius: 8px;
-
     font-weight: 650;
 }
 
@@ -284,7 +235,6 @@ input:focus-visible,
     justify-content: center;
 
     padding: 8px 13px;
-
     background: var(--surface);
     color: var(--text);
 
@@ -298,26 +248,22 @@ input:focus-visible,
 
 .danger-outline {
     padding: 8px 13px;
-
     background: transparent;
-    border: 1px solid #81414b;
-
     color: #ff929b;
+
+    border: 1px solid #81414b;
     border-radius: 8px;
 }
 
 .danger-outline:hover {
-    background: rgba(244, 123, 131, 0.1);
+    background: rgba(244,123,131,.1);
 }
 
 .wide {
     width: 100%;
 }
 
-
-/* =========================================================
-   7. FIXED DICTIONARY NAVIGATION
-   ========================================================= */
+/* DICTIONARY NAVIGATION */
 
 .nav-entry {
     display: flex;
@@ -326,17 +272,16 @@ input:focus-visible,
 
     width: calc(100% - 20px);
     margin: 14px 10px 9px;
-
     padding: 11px 12px;
-
-    border: 1px solid transparent;
-    border-radius: var(--radius);
 
     background: transparent;
     color: var(--text);
 
-    font-size: 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+
     text-align: left;
+    font-size: 14px;
 }
 
 .nav-entry:hover {
@@ -346,34 +291,28 @@ input:focus-visible,
 .nav-entry.active {
     background: var(--surface-active);
     border-color: #5261a0;
-    color: white;
+    color: #fff;
 }
 
 .nav-entry span:first-child {
     font-size: 17px;
 }
 
-
-/* =========================================================
-   8. LIBRARY HEADER
-   ========================================================= */
+/* LIBRARY */
 
 .library-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     gap: 6px;
 
     padding: 14px 12px 9px;
-
     border-top: 1px solid var(--border);
 
     color: var(--muted);
-
     font-size: 10px;
     font-weight: 750;
-    letter-spacing: 0.65px;
+    letter-spacing: .65px;
 }
 
 .library-heading > span {
@@ -391,11 +330,6 @@ input:focus-visible,
     padding: 4px 5px;
 }
 
-
-/* =========================================================
-   9. NOTES LIST
-   ========================================================= */
-
 .note-list {
     flex: 1;
     min-height: 0;
@@ -404,14 +338,12 @@ input:focus-visible,
     overflow-x: hidden;
 
     padding: 4px 9px 16px;
-
     scrollbar-width: thin;
     scrollbar-color: #41495c transparent;
 }
 
 .note-row {
     display: block;
-
     width: 100%;
     min-width: 0;
 
@@ -419,10 +351,10 @@ input:focus-visible,
     padding: 10px 11px;
 
     background: transparent;
+    color: #d7dce8;
+
     border: 1px solid transparent;
     border-radius: 8px;
-
-    color: #d7dce8;
 
     font-size: 13px;
     font-weight: 500;
@@ -431,26 +363,21 @@ input:focus-visible,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
-    transition: background 0.15s ease;
 }
 
 .note-row:hover {
     background: var(--surface-hover);
-    color: #ffffff;
+    color: #fff;
 }
 
 .note-row.active {
     background: var(--surface-active);
     border-color: #485983;
-    color: #ffffff;
+    color: #fff;
     font-weight: 650;
 }
 
-
-/* =========================================================
-   10. FOLDER NAVIGATION - v5.1
-   ========================================================= */
+/* FOLDERS */
 
 .folder-section {
     margin: 3px 0 7px;
@@ -459,12 +386,10 @@ input:focus-visible,
 .folder-heading {
     display: flex;
     align-items: center;
-
     width: 100%;
     gap: 2px;
 
     padding: 3px 2px;
-
     border-radius: 8px;
 }
 
@@ -480,12 +405,11 @@ input:focus-visible,
     min-width: 0;
 
     padding: 7px 5px;
-
     background: transparent;
+    color: #eef0f8;
+
     border: 0;
     border-radius: 6px;
-
-    color: #eef0f8;
 
     font-size: 13px;
     font-weight: 650;
@@ -497,26 +421,24 @@ input:focus-visible,
 }
 
 .folder-toggle:hover {
-    color: #ffffff;
+    color: #fff;
 }
 
 .folder-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     flex-shrink: 0;
 
     min-width: 23px;
     height: 27px;
-
     padding: 3px;
 
     background: transparent;
+    color: var(--muted);
+
     border: 0;
     border-radius: 6px;
-
-    color: var(--muted);
 
     font-size: 16px;
     line-height: 1;
@@ -524,13 +446,12 @@ input:focus-visible,
 
 .folder-action:hover {
     background: #343d50;
-    color: #ffffff;
+    color: #fff;
 }
 
 .folder-children {
     margin-left: 16px;
     padding-left: 10px;
-
     border-left: 1px solid #3a4251;
 }
 
@@ -543,26 +464,19 @@ input:focus-visible,
     margin-top: 7px;
 }
 
-
-/* =========================================================
-   11. SIDEBAR FOOTER / GOOGLE SHEETS STATUS
-   ========================================================= */
+/* SIDEBAR STATUS */
 
 .side-bottom {
     flex-shrink: 0;
-
     padding: 14px 12px;
-
     background: var(--sidebar);
     border-top: 1px solid var(--border);
 }
 
 .sync-label {
+    color: var(--muted);
     font-size: 11px;
     line-height: 1.5;
-
-    color: var(--muted);
-
     overflow-wrap: anywhere;
 }
 
@@ -574,28 +488,19 @@ input:focus-visible,
     color: var(--danger);
 }
 
-
-/* =========================================================
-   12. MAIN CONTENT
-   ========================================================= */
+/* MAIN */
 
 .main {
-    flex: 1;
-    min-width: 0;
-
     display: flex;
     flex-direction: column;
 
+    flex: 1;
+    min-width: 0;
     min-height: 100vh;
     min-height: 100dvh;
 
     background: var(--bg);
 }
-
-
-/* =========================================================
-   13. TOP BAR
-   ========================================================= */
 
 .topbar {
     display: flex;
@@ -603,7 +508,6 @@ input:focus-visible,
     gap: 12px;
 
     min-height: 61px;
-
     padding: 12px 28px;
 
     border-bottom: 1px solid var(--border);
@@ -611,8 +515,7 @@ input:focus-visible,
 }
 
 #pageTitle {
-    color: #ffffff;
-
+    color: #fff;
     font-size: 15px;
     font-weight: 650;
 
@@ -626,21 +529,16 @@ input:focus-visible,
     white-space: nowrap;
 }
 
-
-/* =========================================================
-   14. EMPTY VIEW
-   ========================================================= */
+/* EMPTY VIEW */
 
 .empty {
     flex: 1;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
     padding: 35px 22px;
-
     text-align: center;
 }
 
@@ -651,44 +549,35 @@ input:focus-visible,
 
     width: 62px;
     height: 62px;
-
     margin-bottom: 17px;
 
-    border-radius: 18px;
-
-    background: rgba(100, 120, 237, 0.12);
+    background: rgba(100,120,237,.12);
     color: var(--primary);
-
+    border-radius: 18px;
     font-size: 30px;
 }
 
 .empty h1 {
     margin: 0 0 8px;
-
+    color: #fff;
     font-size: 25px;
-    color: #ffffff;
 }
 
 .empty p {
     margin: 4px 0;
     max-width: 500px;
-
     color: var(--muted);
 }
 
-
-/* =========================================================
-   15. NOTES / DICTIONARY VIEW
-   ========================================================= */
+/* NOTES AND DICTIONARY VIEWS */
 
 .view {
     width: 100%;
     max-width: 1500px;
+    min-width: 0;
 
     margin: 0 auto;
     padding: 24px 30px 45px;
-
-    min-width: 0;
 }
 
 .doc-header {
@@ -703,8 +592,7 @@ input:focus-visible,
 
 .doc-header h1 {
     margin: 0;
-
-    color: #ffffff;
+    color: #fff;
     font-size: 25px;
     line-height: 1.35;
 }
@@ -716,14 +604,12 @@ input:focus-visible,
 #noteTitle {
     flex: 1;
     min-width: 0;
-
     padding: 4px 0;
 
-    border: none;
+    border: 0;
     outline: none;
-
     background: transparent;
-    color: white;
+    color: #fff;
 
     font-size: 26px;
     font-weight: 750;
@@ -733,10 +619,7 @@ input:focus-visible,
     color: #7e8799;
 }
 
-
-/* =========================================================
-   16. EDITOR TOOLBAR
-   ========================================================= */
+/* TOOLBAR */
 
 .toolbar {
     display: flex;
@@ -746,7 +629,6 @@ input:focus-visible,
 
     width: 100%;
     min-width: 0;
-
     margin-bottom: 14px;
     padding: 8px 0 13px;
 
@@ -761,11 +643,10 @@ input:focus-visible,
     min-height: 35px;
     padding: 7px 11px;
 
+    background: #212630;
+    color: #fff;
     border: 1px solid var(--border);
     border-radius: 7px;
-
-    background: #212630;
-    color: #ffffff;
 
     font-size: 13px;
 }
@@ -785,24 +666,20 @@ input:focus-visible,
 
 .font-value {
     min-width: 39px;
-
     text-align: center;
-
     color: #ccd6ef;
     font-size: 12px;
 }
 
 .toolbar-hint {
     margin-left: 10px;
-
     color: #9aa6c3;
     font-size: 11px;
 }
 
-
-/* =========================================================
-   17. NOTES EDITOR - DARK MODE FIX
-   ========================================================= */
+/* ==================================================
+   RICH TEXT EDITOR
+   ================================================== */
 
 .editor {
     display: block;
@@ -816,95 +693,156 @@ input:focus-visible,
     padding: 24px 28px;
 
     background: var(--editor-bg);
-    color: #ffffff;
+    color: #fff;
 
     border: 1px solid #3c4352;
     border-radius: 11px;
 
     font-family: inherit;
     font-size: 16px;
-    line-height: 1.85;
+    line-height: 1.65;
     text-align: left;
 
     outline: none;
+    caret-color: #fff;
 
+    white-space: normal;
     overflow-x: hidden;
     overflow-wrap: anywhere;
     word-break: normal;
 
-    white-space: pre-wrap;
-    caret-color: #ffffff;
-
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 14px rgba(0,0,0,.08);
 }
 
 .editor:focus {
     border-color: #7287ff;
-    box-shadow: 0 0 0 2px rgba(114, 135, 255, 0.17);
+    box-shadow: 0 0 0 2px rgba(114,135,255,.17);
 }
 
-/* Force readable text, including pasted HTML */
+/* Preserve individual font sizes and line heights. */
 
-.editor,
 .editor * {
-    color: #ffffff !important;
-
-    max-width: 100% !important;
     box-sizing: border-box;
+    max-width: 100%;
+    color: #fff !important;
+    overflow-wrap: anywhere;
 }
 
-/* Remove pasted background colors */
-
-.editor * {
-    background-color: transparent !important;
-    font-family: inherit !important;
-}
-
-/* Prevent pasted content shifting outside editor */
+/* Keep pasted content within the editor. */
 
 .editor > * {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-
-    text-indent: 0 !important;
-
-    float: none !important;
-
     max-width: 100% !important;
+    float: none !important;
 }
 
-/* Paragraphs */
+/* Do not force font-size: inherit on children. */
+/* Do not force margin: 0 on all elements. */
+/* Do not force line-height on all elements. */
 
-.editor p,
-.editor div,
-.editor li,
-.editor blockquote {
-    overflow-wrap: anywhere;
-    word-break: normal;
-}
+/* Paragraphs with no inline spacing. */
 
 .editor p {
-    margin-top: 0;
-    margin-bottom: 13px;
+    margin-block: 0 14px;
+}
+
+/* Divs preserve their own inline margins and padding. */
+
+.editor div {
+    max-width: 100%;
+}
+
+/* Default headings; inline values take priority. */
+
+.editor h1 {
+    font-size: 2em;
+    line-height: 1.3;
+}
+
+.editor h2 {
+    font-size: 1.6em;
+    line-height: 1.35;
+}
+
+.editor h3 {
+    font-size: 1.3em;
+    line-height: 1.4;
+}
+
+.editor h4 {
+    font-size: 1.15em;
+    line-height: 1.4;
+}
+
+.editor h5,
+.editor h6 {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.editor h1,
+.editor h2,
+.editor h3,
+.editor h4,
+.editor h5,
+.editor h6 {
+    margin-block: 20px 12px;
+    font-weight: 700;
+}
+
+/* Bold, italic and underline. */
+
+.editor strong,
+.editor b {
+    font-weight: 700;
+}
+
+.editor em,
+.editor i {
+    font-style: italic;
+}
+
+.editor u {
+    text-decoration: underline;
+}
+
+.editor small {
+    font-size: .85em;
 }
 
 /* Lists */
 
 .editor ul,
 .editor ol {
-    padding-left: 24px;
+    margin: 10px 0 15px;
+    padding-left: 25px;
 }
 
-/* Preserve bold and italic */
+/* Original horizontal divider. */
 
-.editor strong,
-.editor b {
-    font-weight: 750;
+.editor hr {
+    display: block;
+    width: 100%;
+    height: 0;
+
+    border: 0;
+    border-top: 1px solid #3b414a;
+    margin: 22px 0;
 }
 
-.editor em,
-.editor i {
-    font-style: italic;
+/* Preserve inline border-bottom from sanitized HTML. */
+/* The JavaScript sanitizer supplies a neutral border color. */
+
+.editor [style*="border-bottom"],
+.editor [style*="border-top"] {
+    max-width: 100%;
+}
+
+/* Blockquotes */
+
+.editor blockquote {
+    margin: 12px 0;
+    padding-left: 14px;
+    border-left: 3px solid var(--primary);
 }
 
 /* Links */
@@ -917,8 +855,6 @@ input:focus-visible,
 /* Images */
 
 .editor img {
-    display: inline-block;
-
     max-width: 100% !important;
     height: auto !important;
 }
@@ -926,8 +862,7 @@ input:focus-visible,
 /* Code */
 
 .editor pre {
-    overflow-x: auto;
-
+    max-width: 100%;
     padding: 12px;
 
     border: 1px solid var(--border);
@@ -937,51 +872,37 @@ input:focus-visible,
     overflow-wrap: anywhere;
 }
 
-.editor code {
-    font-family: Consolas, "Courier New", monospace !important;
-    overflow-wrap: anywhere;
+.editor code,
+.editor pre {
+    font-family: Consolas, "Courier New", monospace;
 }
 
-/* Tables pasted into editor */
+/* Tables */
 
 .editor table {
     width: 100%;
     max-width: 100%;
-
     border-collapse: collapse;
 }
 
 .editor th,
 .editor td {
     padding: 8px;
-
     border: 1px solid var(--border);
     vertical-align: top;
-
     overflow-wrap: anywhere;
 }
 
-/* Quote */
+/* Never override inline font-size with !important. */
 
-.editor blockquote {
-    margin: 12px 0;
-    padding-left: 14px;
-
-    border-left: 3px solid var(--primary);
-
-    color: #d2d9eb !important;
-}
-
-
-/* =========================================================
-   18. DICTIONARY ACTION BAR
-   ========================================================= */
+/* ==================================================
+   DICTIONARY
+   ================================================== */
 
 .dict-actions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-
     gap: 10px;
 
     margin-bottom: 15px;
@@ -991,15 +912,13 @@ input:focus-visible,
     flex: 1;
     min-width: 150px;
     max-width: 350px;
-
     padding: 10px 12px;
+
+    background: var(--input-bg);
+    color: #fff;
 
     border: 1px solid var(--border);
     border-radius: 8px;
-
-    background: var(--input-bg);
-    color: #ffffff;
-
     outline: none;
 }
 
@@ -1011,30 +930,21 @@ input:focus-visible,
     margin-left: auto;
 }
 
-
-/* =========================================================
-   19. DICTIONARY TABLE
-   ========================================================= */
-
 .table-wrap {
     width: 100%;
     max-width: 100%;
-
     overflow-x: auto;
 
+    background: var(--editor-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-
-    background: var(--editor-bg);
 }
 
 .dictionary-table {
     width: 100%;
-
     border-collapse: collapse;
     table-layout: fixed;
-
-    color: #ffffff;
+    color: #fff;
 }
 
 .dictionary-table thead {
@@ -1043,7 +953,6 @@ input:focus-visible,
 
 .dictionary-table th {
     padding: 14px 15px;
-
     color: #e8ebf7;
 
     font-size: 13px;
@@ -1055,16 +964,12 @@ input:focus-visible,
 
 .dictionary-table td {
     padding: 11px 15px;
-
-    color: #ffffff;
+    color: #fff;
     background: transparent;
-
     vertical-align: top;
 
     border-bottom: 1px solid #303540;
-
     overflow-wrap: anywhere;
-    word-break: normal;
 }
 
 .dictionary-table tbody tr:last-child td {
@@ -1075,18 +980,13 @@ input:focus-visible,
     background: #202631;
 }
 
-/* Force white text for Dictionary content */
-
 .dictionary-table td,
 .dictionary-table td * {
-    color: #ffffff;
+    color: #fff;
 }
-
-/* Editable cells */
 
 .dictionary-table [contenteditable="true"] {
     min-height: 24px;
-
     padding: 5px 6px;
 
     border-radius: 5px;
@@ -1094,8 +994,7 @@ input:focus-visible,
 
     white-space: pre-wrap;
     overflow-wrap: anywhere;
-
-    caret-color: #ffffff;
+    caret-color: #fff;
 }
 
 .dictionary-table [contenteditable="true"]:focus {
@@ -1107,19 +1006,13 @@ input:focus-visible,
 .dictionary-table textarea {
     width: 100%;
     min-width: 0;
-
     padding: 7px 8px;
 
     background: var(--input-bg);
-    color: white;
+    color: #fff;
 
     border: 1px solid var(--border);
     border-radius: 6px;
-}
-
-.dictionary-table input:focus,
-.dictionary-table textarea:focus {
-    outline: 1px solid var(--primary);
 }
 
 .action-col {
@@ -1132,16 +1025,14 @@ input:focus-visible,
 
 .dictionary-table td button {
     padding: 5px 8px;
-
     background: transparent;
     color: #ff949b;
-
     border: 0;
     border-radius: 5px;
 }
 
 .dictionary-table td button:hover {
-    background: rgba(255, 100, 110, 0.14);
+    background: rgba(255,100,110,.14);
 }
 
 #editToggle {
@@ -1150,44 +1041,35 @@ input:focus-visible,
 
 #dictSave:disabled,
 #addRow:disabled {
-    opacity: 0.35;
+    opacity: .35;
     cursor: not-allowed;
 }
 
-
-/* =========================================================
-   20. RIGHT CLICK CONTEXT MENU
-   ========================================================= */
+/* CONTEXT MENU */
 
 .context-menu {
     position: fixed;
 
     min-width: 190px;
     max-width: calc(100vw - 24px);
-
     padding: 6px;
 
     background: #252a35;
-
     border: 1px solid #495164;
     border-radius: 9px;
-
     box-shadow: var(--shadow);
-
     z-index: 3000;
 }
 
 .context-menu button {
     width: 100%;
-
     padding: 10px 13px;
 
     background: transparent;
-    color: #ffffff;
+    color: #fff;
 
-    border: none;
+    border: 0;
     border-radius: 6px;
-
     text-align: left;
     font-size: 13px;
 }
@@ -1196,10 +1078,7 @@ input:focus-visible,
     background: #39445c;
 }
 
-
-/* =========================================================
-   21. MODAL
-   ========================================================= */
+/* ADD WORD MODAL */
 
 .modal-backdrop {
     position: fixed;
@@ -1210,20 +1089,16 @@ input:focus-visible,
     justify-content: center;
 
     padding: 18px;
-
-    background: rgba(0, 0, 0, 0.72);
-
+    background: rgba(0,0,0,.72);
     z-index: 4000;
 }
 
 .modal {
     width: 100%;
     max-width: 460px;
-
     padding: 24px;
 
     background: #1d222c;
-
     border: 1px solid #465063;
     border-radius: 13px;
 
@@ -1232,15 +1107,13 @@ input:focus-visible,
 
 .modal h2 {
     margin: 0 0 20px;
-
-    color: #ffffff;
+    color: #fff;
     font-size: 20px;
 }
 
 .modal label {
     display: flex;
     flex-direction: column;
-
     gap: 7px;
     margin-bottom: 15px;
 
@@ -1250,15 +1123,13 @@ input:focus-visible,
 
 .modal input {
     width: 100%;
-
     padding: 11px 12px;
 
     background: var(--input-bg);
-    color: #ffffff;
+    color: #fff;
 
     border: 1px solid var(--border);
     border-radius: 8px;
-
     outline: none;
 }
 
@@ -1270,15 +1141,11 @@ input:focus-visible,
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
     gap: 10px;
     margin-top: 22px;
 }
 
-
-/* =========================================================
-   22. TOAST NOTIFICATIONS
-   ========================================================= */
+/* TOAST */
 
 .toast {
     position: fixed;
@@ -1286,28 +1153,21 @@ input:focus-visible,
     bottom: 20px;
 
     max-width: min(420px, calc(100vw - 32px));
-
     padding: 12px 18px;
 
     background: #303a4e;
-    color: #ffffff;
+    color: #fff;
 
     border: 1px solid #53617a;
     border-radius: 9px;
-
-    font-size: 13px;
-
     box-shadow: var(--shadow);
 
-    z-index: 5000;
-
+    font-size: 13px;
     overflow-wrap: anywhere;
+    z-index: 5000;
 }
 
-
-/* =========================================================
-   23. SCROLLBAR
-   ========================================================= */
+/* SCROLLBAR */
 
 ::-webkit-scrollbar {
     width: 9px;
@@ -1327,13 +1187,9 @@ input:focus-visible,
     background: #566075;
 }
 
-
-/* =========================================================
-   24. TABLET RESPONSIVE
-   ========================================================= */
+/* TABLET */
 
 @media (max-width: 1050px) {
-
     :root {
         --sidebar-width: 245px;
     }
@@ -1356,13 +1212,9 @@ input:focus-visible,
     }
 }
 
-
-/* =========================================================
-   25. MOBILE RESPONSIVE
-   ========================================================= */
+/* MOBILE */
 
 @media (max-width: 760px) {
-
     .mobile-only {
         display: inline-flex !important;
     }
@@ -1373,7 +1225,6 @@ input:focus-visible,
 
     .sidebar {
         position: fixed;
-
         top: 0;
         bottom: 0;
         left: 0;
@@ -1383,11 +1234,9 @@ input:focus-visible,
         height: 100dvh;
 
         transform: translateX(-105%);
-
-        transition: transform 0.22s ease;
+        transition: transform .22s ease;
 
         box-shadow: var(--shadow);
-
         z-index: 2000;
     }
 
@@ -1398,8 +1247,8 @@ input:focus-visible,
     }
 
     .brand {
-        padding: 14px 12px;
         min-height: 68px;
+        padding: 14px 12px;
     }
 
     #closeSidebar {
@@ -1409,7 +1258,6 @@ input:focus-visible,
     .main {
         width: 100%;
         min-width: 0;
-
         min-height: 100dvh;
     }
 
@@ -1470,20 +1318,14 @@ input:focus-visible,
     .toolbar-hint {
         width: 100%;
         margin-left: 0;
-
         font-size: 10px;
         line-height: 1.5;
     }
 
     .editor {
-        min-height: 55vh;
         min-height: 55dvh;
-
         padding: 16px 15px;
-
-        font-size: 15px;
-        line-height: 1.75;
-
+        line-height: 1.65;
         border-radius: 9px;
     }
 
@@ -1522,13 +1364,9 @@ input:focus-visible,
     }
 }
 
-
-/* =========================================================
-   26. SMALL MOBILE SCREENS
-   ========================================================= */
+/* SMALL MOBILE */
 
 @media (max-width: 390px) {
-
     .view {
         padding-left: 9px;
         padding-right: 9px;
@@ -1557,358 +1395,14 @@ input:focus-visible,
     }
 }
 
-
-/* =========================================================
-   27. ACCESSIBILITY / MOTION
-   ========================================================= */
+/* ACCESSIBILITY */
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
         scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
     }
 }
-
-
-
-/* ==========================================
-   GOOD DOCS v5.2
-   RICH TEXT HTML FORMATTING
-   ========================================== */
-
-/* Base font size for normal text */
-
-.editor {
-    font-size: 16px;
-    line-height: 1.75;
-
-    color: #ffffff;
-
-    overflow-wrap: anywhere;
-    word-break: normal;
-}
-
-/* Preserve individual font sizes */
-
-
-/* Headings */
-
-.editor h1 {
-    font-size: 2em;
-    font-weight: 750;
-    line-height: 1.3;
-    margin: 20px 0 14px;
-}
-
-.editor h2 {
-    font-size: 1.6em;
-    font-weight: 700;
-    line-height: 1.35;
-    margin: 18px 0 12px;
-}
-
-.editor h3 {
-    font-size: 1.3em;
-    font-weight: 700;
-    line-height: 1.4;
-    margin: 16px 0 10px;
-}
-
-.editor h4 {
-    font-size: 1.15em;
-    font-weight: 650;
-    margin: 14px 0 8px;
-}
-
-.editor h5,
-.editor h6 {
-    font-size: 1em;
-    font-weight: 650;
-    margin: 12px 0 8px;
-}
-
-/* Paragraphs */
-
-.editor p {
-    margin-top: 0;
-    margin-bottom: 12px;
-}
-
-/* Bold and italic */
-
-.editor strong,
-.editor b {
-    font-weight: 750;
-}
-
-.editor em,
-.editor i {
-    font-style: italic;
-}
-
-/* Underline */
-
-.editor u {
-    text-decoration: underline;
-}
-
-/* Lists */
-
-.editor ul,
-.editor ol {
-    padding-left: 25px;
-    margin: 10px 0 15px;
-}
-
-/* Keep dark mode text readable */
-
-.editor,
-.editor * {
-    color: #ffffff !important;
-}
-
-/* Links */
-
-.editor a {
-    color: #aebdff !important;
-}
-
-/* Do not force a uniform font-size on children.
-   Inline font-size from sanitized HTML takes priority. */
-
-/* Responsive */
-
-@media (max-width: 760px) {
-    .editor {
-        padding: 16px;
-        line-height: 1.65;
-    }
-}
-
-
-/* ==========================================
-   GOOD DOCS v5.2 - ARTICLE FORMATTING
-   ========================================== */
-
-.editor {
-    white-space: normal;
-    line-height: 1.65;
-    color: #ffffff;
-    overflow-wrap: anywhere;
-}
-
-/* Preserve HTML text dimensions */
-.editor [style*="font-size"] {
-    line-height: inherit;
-}
-
-/* Default paragraph spacing */
-.editor p {
-    margin-top: 0;
-    margin-bottom: 14px;
-}
-
-/* Headings */
-.editor h1 {
-    font-size: 2em;
-    line-height: 1.3;
-    margin: 22px 0 14px;
-}
-
-.editor h2 {
-    font-size: 1.6em;
-    line-height: 1.35;
-    margin: 20px 0 12px;
-}
-
-.editor h3 {
-    font-size: 1.3em;
-    line-height: 1.4;
-    margin: 18px 0 10px;
-}
-
-/* Smaller supporting text remains smaller */
-.editor small {
-    font-size: 0.85em;
-}
-
-/* Divider between article sections */
-.editor hr {
-    display: block;
-    border: 0;
-    border-top: 1px solid #3b414a;
-    margin: 22px 0;
-    height: 0;
-}
-
-/* Preserve block spacing */
-.editor div,
-.editor blockquote {
-    overflow-wrap: anywhere;
-}
-
-/* Preserve text emphasis */
-.editor strong,
-.editor b {
-    font-weight: 750;
-}
-
-/* Keep Dark Mode */
-.editor,
-.editor * {
-    color: #ffffff !important;
-    max-width: 100% !important;
-}
-
-/* Muted text when explicitly marked */
-.editor a {
-    color: #aebdff !important;
-}
-
-/* Prevent pasted fixed widths */
-.editor > * {
-    max-width: 100% !important;
-}
-
-/* Mobile */
-@media (max-width: 760px) {
-    .editor {
-        padding: 16px;
-    }
-}
-
-
-/* ==========================================
-   GOOD DOCS v5.2.2
-   RICH TEXT SPACING FIX
-   ========================================== */
-
-/* Khung soạn thảo */
-.editor {
-    white-space: normal;
-    line-height: 1.65;
-    color: #ffffff;
-}
-
-/* Cho phép nội dung dùng font-size riêng */
-.editor [style*="font-size"] {
-    font-size: revert-layer;
-}
-
-/* Giữ khoảng cách giữa các đoạn */
-.editor p {
-    margin-top: 0;
-    margin-bottom: 12px;
-}
-
-/* Khoảng cách cho các DIV ở cấp đầu tiên */
-.editor > div {
-    margin-bottom: 12px;
-}
-
-/* Khoảng cách cho tiêu đề */
-.editor h1,
-.editor h2,
-.editor h3,
-.editor h4 {
-    margin-top: 20px;
-    margin-bottom: 12px;
-}
-
-/* Đường kẻ phân cách */
-.editor hr {
-    display: block;
-    border: none;
-    border-top: 1px solid #3b414a;
-    margin: 22px 0;
-    height: 0;
-}
-
-/* Đảm bảo chữ vẫn sáng trong Dark Mode */
-.editor,
-.editor * {
-    color: #ffffff !important;
-}
-```
-
-**Lưu ý:** Quy tắc `font-size: revert-layer` ở trên không cần thiết và có thể ảnh hưởng tới một số stylesheet. Bạn nên bỏ riêng khối `.editor [style*="font-size"]` này; kích thước nội tuyến được giữ khi không có CSS `font-size: ... !important` ghi đè.
-
-Đoạn CSS còn lại sẽ giúp nội dung dễ đọc hơn, nhưng chưa tự khôi phục đường phân cách nếu HTML được dán không chứa `<hr>`.
-
-## 2. Sửa `app.js` — Giữ đường phân cách của HTML nguồn
-
-Trong hàm `sanitize()`, tìm đoạn:
-
-```javascript
-const style = node.style;
-const safe = [];
-```
-
-Sau đoạn xử lý `marginBottom`, thêm:
-
-<CodeBlock language="javascript" editable>
-// 10. Preserve safe horizontal dividers
-const borderBottom = style.borderBottom.trim();
-
-const borderMatch = borderBottom.match(
-    /^(\d+(?:\.\d+)?)px\s+(solid|dashed)\s+(#[0-9a-fA-F]{3,8}|rgba?\([0-9.,%\s]+\))$/i
-);
-
-if (borderMatch) {
-    const width = Number(borderMatch[1]);
-
-    if (width >= 0.5 && width <= 3) {
-        // Use the Good Docs neutral divider color
-        safe.push(
-            `border-bottom:${width}px ${borderMatch[2]} #3b414a`
-        );
-    }
-}
-```
-
-Điều này bảo toàn đường phân cách nếu HTML copy có thuộc tính `border-bottom` nội tuyến. Nó không thể khôi phục đường kẻ vốn chỉ được định nghĩa qua CSS class của website nguồn.
-
-## 3. Giải pháp để giữ đúng định dạng như ảnh đầu tiên
-
-Mình nhận thấy trang nguồn của bạn có các nút:
-
-- Copy TXT
-- Xuất TXT
-- **Xuất HTML**
-
-Đây là điểm rất hữu ích. Vì bạn đang sử dụng công cụ tự tạo bài báo song ngữ, **cách đáng tin cậy nhất là để công cụ nguồn xuất HTML có chứa đầy đủ định dạng**, ví dụ:
-
-<CodeBlock language="html" editable>
-<section class="bilingual-article">
-
-  <div style="margin-bottom:22px;
-              padding-bottom:20px;
-              border-bottom:1px solid #3b414a;">
-
-    <p style="font-size:20px;
-              font-weight:600;
-              line-height:1.55;
-              margin:0 0 8px;">
-      Authorities in southern Vietnam are seeking
-      feedback on a plan to develop outlet
-      shopping centers.
-    </p>
-
-    <p style="font-size:14px;
-              line-height:1.75;
-              margin:0;">
-      Các cơ quan chức năng tại miền Nam Việt Nam
-      đang lấy ý kiến về kế hoạch phát triển
-      các trung tâm mua sắm.
-    </p>
-
-  </div>
-
-</section>
-
-
-
