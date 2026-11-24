@@ -763,12 +763,12 @@ input:focus-visible,
     box-shadow: 0 0 0 2px rgba(114,135,255,.17);
 }
 
-/* Preserve individual font sizes and line heights. */
+/* Preserve individual font sizes, line heights and text colors. */
 
 .editor * {
     box-sizing: border-box;
     max-width: 100%;
-    color: #fff !important;
+    color: inherit;
     overflow-wrap: anywhere;
 }
 
