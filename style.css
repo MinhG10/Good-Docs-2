@@ -890,7 +890,7 @@ input:focus-visible,
 /* Links */
 
 .editor a {
-    color: #aebdff !important;
+    color: #aebdff;
     text-decoration: underline;
 }
 

@@ -807,35 +807,22 @@
   function colorNoteText(color) {
     if (st.mode !== 'note' || st.blocked) return;
 
+    const editor = $('noteEditor');
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed ||
-        !$('noteEditor').contains(selection.anchorNode) ||
-        !$('noteEditor').contains(selection.focusNode)) {
+        !editor.contains(selection.anchorNode) ||
+        !editor.contains(selection.focusNode)) {
       return toast('Hãy bôi đen từ hoặc đoạn cần đổi màu chữ.');
     }
 
-    $('noteEditor').focus();
+    editor.focus({ preventScroll: true });
     document.execCommand('styleWithCSS', false, true);
-    document.execCommand('foreColor', false, color);
-
-    syncEditor();
-    mark();
-  }
-
-  function resetNoteTextColor() {
-    if (st.mode !== 'note' || st.blocked) return;
-
-    const selection = window.getSelection();
-    if (!selection || selection.isCollapsed ||
-        !$('noteEditor').contains(selection.anchorNode) ||
-        !$('noteEditor').contains(selection.focusNode)) {
-      return toast('Hãy bôi đen từ hoặc đoạn cần trả về màu chữ mặc định.');
+    if (!document.execCommand('foreColor', false, color)) {
+      return toast('Không thể đổi màu chữ cho vùng đã chọn.');
     }
 
-    $('noteEditor').focus();
-    document.execCommand('styleWithCSS', false, true);
-    document.execCommand('foreColor', false, '#f4f5f9');
-
+    // Reveal the applied color independently of selection rendering.
+    if (selection.rangeCount) selection.collapseToEnd();
     syncEditor();
     mark();
   }
@@ -1147,7 +1134,9 @@
     $('noteTextOrange').onclick = () => {
       colorNoteText('#d97745');
     };
-    $('noteTextReset').onclick = resetNoteTextColor;
+    $('noteTextReset').onclick = () => {
+      colorNoteText('#f4f5f9');
+    };
 
     // Keep the editor selection when a formatting button is clicked.
     for (const id of [
