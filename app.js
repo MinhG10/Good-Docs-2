@@ -193,16 +193,30 @@
         .toLowerCase();
 
       const highlightColors = new Map([
-        ['#ffeb3b', '#ffeb3b'],
-        ['rgb(255,235,59)', '#ffeb3b'],
-        ['#ef4444', '#ef4444'],
-        ['rgb(239,68,68)', '#ef4444']
+        // Current lighter colors.
+        ['#fff3a3', '#fff3a3'],
+        ['rgb(255,243,163)', '#fff3a3'],
+        ['#ffc7c7', '#ffc7c7'],
+        ['rgb(255,199,199)', '#ffc7c7'],
+
+        // Migrate highlights saved by the first v5.3 release.
+        ['#ffeb3b', '#fff3a3'],
+        ['rgb(255,235,59)', '#fff3a3'],
+        ['#ef4444', '#ffc7c7'],
+        ['rgb(239,68,68)', '#ffc7c7']
       ]);
 
       if (highlightColors.has(backgroundColor)) {
         safe.push(
-          `background-color:${highlightColors.get(backgroundColor)}`
+          `background-color:${highlightColors.get(backgroundColor)}`,
+          'color:#1f2937'
         );
+      } else if ([
+        '#181b22',
+        'rgb(24,27,34)'
+      ].includes(backgroundColor)) {
+        // Default editor colors can override part of a highlighted span.
+        safe.push('background-color:#181b22', 'color:#ffffff');
       }
 
       // Text decoration.
@@ -792,6 +806,36 @@
       document.execCommand('backColor', false, color);
     }
 
+    document.execCommand('foreColor', false, '#1f2937');
+
+    syncEditor();
+    mark();
+  }
+
+  function resetNoteHighlight() {
+    if (st.mode !== 'note' || st.blocked) return;
+
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed ||
+        !$('noteEditor').contains(selection.anchorNode) ||
+        !$('noteEditor').contains(selection.focusNode)) {
+      return toast('Hãy bôi đen từ hoặc đoạn cần bỏ màu nền.');
+    }
+
+    $('noteEditor').focus();
+
+    const cleared = document.execCommand(
+      'hiliteColor', false, '#181b22'
+    );
+
+    if (!cleared) {
+      document.execCommand('backColor', false, '#181b22');
+    }
+
+    // Highlighted text uses a dark foreground for contrast.
+    // Restore the editor's default text color when removing the background.
+    document.execCommand('foreColor', false, '#ffffff');
+
     syncEditor();
     mark();
   }
@@ -1097,14 +1141,16 @@
     $('noteBold').onclick = execBold;
     $('noteIncrease').onclick = () => fontNote(2);
     $('noteDecrease').onclick = () => fontNote(-2);
-    $('noteHighlightYellow').onclick = () => highlightNote('#ffeb3b');
-    $('noteHighlightRed').onclick = () => highlightNote('#ef4444');
+    $('noteHighlightYellow').onclick = () => highlightNote('#fff3a3');
+    $('noteHighlightRed').onclick = () => highlightNote('#ffc7c7');
+    $('noteHighlightReset').onclick = resetNoteHighlight;
 
     // Keep the editor selection when a formatting button is clicked.
     for (const id of [
       'noteBold',
       'noteHighlightYellow',
-      'noteHighlightRed'
+      'noteHighlightRed',
+      'noteHighlightReset'
     ]) {
       $(id).addEventListener('mousedown', e => e.preventDefault());
     }
